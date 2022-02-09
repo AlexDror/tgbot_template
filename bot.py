@@ -1,9 +1,10 @@
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
+
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
@@ -56,6 +57,9 @@ async def main():
         await dp.storage.wait_closed()
         await bot.session.close()
 
+
+
+CommandStart()
 
 if __name__ == '__main__':
     try:
