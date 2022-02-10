@@ -1,7 +1,5 @@
 from dataclasses import dataclass
-
 from environs import Env
-
 
 @dataclass
 class DbConfig:
@@ -10,13 +8,11 @@ class DbConfig:
     user: str
     database: str
 
-
 @dataclass
 class TgBot:
     token: str
     admin_ids: list[int]
     use_redis: bool
-
 
 @dataclass
 class Miscellaneous:

@@ -1,65 +1,49 @@
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher 
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.contrib.fsm_storage.redis import RedisStorage2
-
+from aiogram import Bot, Dispatcher
+from aiogram.dispatcher.fsm.storage.memory import MemoryStorage
+from aiogram.dispatcher.fsm.storage.redis import RedisStorage
 
 from tgbot.config import load_config
-from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.echo import register_echo
+from tgbot.handlers.states import register_fsm
 from tgbot.handlers.user import register_user
 from tgbot.middlewares.db import DbMiddleware
 
 logger = logging.getLogger(__name__)
+config = load_config('.env')
 
 
-def register_all_middlewares(dp):
-    dp.setup_middleware(DbMiddleware())
+def register_all_middlewares(dp: Dispatcher):
+    dp.update.outer_middleware(DbMiddleware())
 
 
-def register_all_filters(dp):
-    dp.filters_factory.bind(AdminFilter)
-
-
-def register_all_handlers(dp):
+def register_all_handlers(dp: Dispatcher):
+    register_fsm(dp)
     register_admin(dp)
     register_user(dp)
-
     register_echo(dp)
 
-
 async def main():
+    storage = RedisStorage() if config.tg_bot.use_redis else MemoryStorage()
+    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    dp = Dispatcher(storage=storage)
+
     logging.basicConfig(
         level=logging.INFO,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
     )
     logger.info("Starting bot")
-    config = load_config(".env")
-
-    storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
-    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
-    dp = Dispatcher(bot, storage=storage)
-
-    bot['config'] = config
-
-    register_all_middlewares(dp)
-    register_all_filters(dp)
+    # register_all_middlewares(dp)
     register_all_handlers(dp)
-
     # start
     try:
-        await dp.start_polling()
+        await dp.start_polling(bot)
     finally:
-        await dp.storage.close()
-        await dp.storage.wait_closed()
+        await dp.fsm.storage.close()
         await bot.session.close()
-
-
-
-CommandStart()
 
 if __name__ == '__main__':
     try:
