@@ -1,17 +1,48 @@
 import logging
 from typing import Dict, Any
 
+from aiogoogletrans import Translator
 from aiogram import Router, F, html
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
 
-from tgbot.models.fsm import Form
+from tgbot.keyboards.reply import reply_keyboard
+from tgbot.models.fsm import Form, HotelBotForm
+from aiohttp.client import ClientSession
 
+
+APIKEY = '24a18de6fdmsh8128e0141c2e59fp11107bjsn9c0879672d39'
 
 async def command_start(message: Message, state: FSMContext):
-    await state.set_state(Form.name)
-    await message.answer("Hi there! What's your name?", reply_markup=ReplyKeyboardRemove(),)
+    await state.set_state(HotelBotForm.init)
+    await message.answer('Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n'
+                         'Я попробую найти для Вас комфортный отель по заданным Вами условиям,'
+                         'и я уверен, у нас все получится! Если Вы готовы, введите название'
+                         'города, в котором Вы планируете остановиться',
+                         reply_markup=ReplyKeyboardMarkup(keyboard=[reply_keyboard],
+                                                          resize_keyboard=True,),)
+
+async def process_city(message: Message, state: FSMContext):
+    translator = Translator()
+    city = await translator.translate(message.text)
+    await state.update_data(city=city)
+    url = "https://hotels4.p.rapidapi.com/locations/v2/search"
+    querystring = {"query": city, "locale": "en_US", "currency": "USD"}
+    headers = {
+        'x-rapidapi-host': "hotels4.p.rapidapi.com",
+        'x-rapidapi-key': "24a18de6fdmsh8128e0141c2e59fp11107bjsn9c0879672d39"
+    }
+    async with ClientSession() as session:
+        async with session.get(url, headers=headers, params=querystring) as resp:
+            if resp.status == 200:
+                print(await resp.text())
+
+
+
+# async def command_start(message: Message, state: FSMContext):
+#     await state.set_state(Form.name)
+#     await message.answer("Hi there! What's your name?", reply_markup=ReplyKeyboardRemove(),)
 
 
 async def cancel_handler(message: Message, state: FSMContext) -> None:
@@ -28,12 +59,7 @@ async def process_name(message: Message, state: FSMContext):
     await message.answer(
         f"Nice to meet you, {html.quote(message.text)}!\nDid you like to write bots?",
         reply_markup=ReplyKeyboardMarkup(
-            keyboard=[
-                [
-                    KeyboardButton(text="Yes"),
-                    KeyboardButton(text="No"),
-                ]
-            ],
+            keyboard=[[KeyboardButton(text="Yes"), KeyboardButton(text="No"),]],
             resize_keyboard=True,
         ),
     )
@@ -88,7 +114,7 @@ async def show_summary(message: Message, data: Dict[str, Any], positive: bool = 
 def register_fsm(dp: Router):
     dp.message.register(command_start, Command(commands=["start"]))
     dp.message.register(cancel_handler, Command(commands=['cancel']) or F.text.casefold() == 'cancel')
-    dp.message.register(process_name, Form.name)
+    dp.message.register(process_city, HotelBotForm.init)
     dp.message.register(process_dont_like_write_bots, Form.like_bots and F.text.casefold() == 'no')
     dp.message.register(process_like_write_bots, Form.like_bots and F.text.casefold() == 'yes')
     dp.message.register(process_unknown_write_bots, Form.like_bots)

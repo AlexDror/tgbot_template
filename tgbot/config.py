@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+
+from aiogram import Bot
+from aiogram.types import BotCommand
 from environs import Env
 
 @dataclass
@@ -44,3 +47,13 @@ def load_config(path: str = None):
         ),
         misc=Miscellaneous()
     )
+BotCommand
+async def set_commands(bot: Bot):
+    await bot.set_my_commands([{'command':'start', 'description':'Начало поиска'},
+                               {'command': 'help', 'description':'Помощь'},
+                               {'command': 'lowprice', 'description':'По возрастанию цены'},
+                               {'command': 'highprice', 'description':'По убыванию цены'},
+                               {'command': 'bestdeal', 'description':'Лучший выбор по удаленности и цене'},
+                               {'command': 'history', 'description':'История поиска'},
+                               ])
+

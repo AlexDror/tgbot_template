@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.fsm.storage.memory import MemoryStorage
 from aiogram.dispatcher.fsm.storage.redis import RedisStorage
 
-from tgbot.config import load_config
+from tgbot.config import load_config, set_commands
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.echo import register_echo
 from tgbot.handlers.states import register_fsm
@@ -14,6 +14,9 @@ from tgbot.middlewares.db import DbMiddleware
 
 logger = logging.getLogger(__name__)
 config = load_config('.env')
+storage = RedisStorage() if config.tg_bot.use_redis else MemoryStorage()
+bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+dp = Dispatcher(storage=storage)
 
 
 def register_all_middlewares(dp: Dispatcher):
@@ -27,16 +30,13 @@ def register_all_handlers(dp: Dispatcher):
     register_echo(dp)
 
 async def main():
-    storage = RedisStorage() if config.tg_bot.use_redis else MemoryStorage()
-    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
-    dp = Dispatcher(storage=storage)
-
     logging.basicConfig(
         level=logging.INFO,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
     )
     logger.info("Starting bot")
     # register_all_middlewares(dp)
+    await set_commands(bot)
     register_all_handlers(dp)
     # start
     try:
