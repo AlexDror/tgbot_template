@@ -8,13 +8,18 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
 from aiohttp.client import ClientSession
 
-from bot import config
+
 from tgbot.keyboards.reply import reply_keyboard
 from tgbot.misc.aiogoogletrans2.client import Translator
 from tgbot.models.fsm import Form, HotelBotForm
+from tgbot.config import load_config
+
+config = load_config('.env')
+ADMINS = config.tg_bot.admin_ids
 
 APIKEY = config.tg_bot.api_token
-ADMINS = config.tg_bot.admin_ids
+
+
 
 async def command_start(message: Message, state: FSMContext):
     await state.set_state(HotelBotForm.init)
