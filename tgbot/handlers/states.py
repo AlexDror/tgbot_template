@@ -6,14 +6,15 @@ from aiogram import Router, F, html
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
+from aiohttp.client import ClientSession
 
+from bot import config
 from tgbot.keyboards.reply import reply_keyboard
 from tgbot.misc.aiogoogletrans2.client import Translator
 from tgbot.models.fsm import Form, HotelBotForm
-from aiohttp.client import ClientSession
 
-
-APIKEY = '24a18de6fdmsh8128e0141c2e59fp11107bjsn9c0879672d39'
+APIKEY = config.tg_bot.api_token
+ADMINS = config.tg_bot.admin_ids
 
 async def command_start(message: Message, state: FSMContext):
     await state.set_state(HotelBotForm.init)
@@ -24,6 +25,7 @@ async def command_start(message: Message, state: FSMContext):
                          'города, в котором Вы планируете остановиться',
                          reply_markup=ReplyKeyboardMarkup(keyboard=[reply_keyboard],
                                                           resize_keyboard=True,),)
+
 
 async def process_city(message: Message, state: FSMContext):
     city_text = message.text
