@@ -1,12 +1,12 @@
-# import asyncio
-#
-# from aiogoogletrans import Translator
-#
-# async def test():
-#     text='Привет'
-#     t = Translator()
-#     tr = await t.translate(text)
-#     print(tr)
-#
-# asyncio.run(test())
-import
+import asyncio
+
+from tgbot.misc.aiogoogletrans2.client import Translator
+
+
+async def test():
+    text='Тверь'
+    t = Translator()
+    tr = await t.translate(text)
+    print(tr.text)
+
+asyncio.run(test())
