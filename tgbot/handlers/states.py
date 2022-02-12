@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Dict, Any
 
@@ -16,6 +17,7 @@ APIKEY = '24a18de6fdmsh8128e0141c2e59fp11107bjsn9c0879672d39'
 
 async def command_start(message: Message, state: FSMContext):
     await state.set_state(HotelBotForm.init)
+    await state.update_data(locale=message.from_user.language_code)
     await message.answer('Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n'
                          'Я попробую найти для Вас комфортный отель по заданным Вами условиям,'
                          'и я уверен, у нас все получится! Если Вы готовы, введите название'
@@ -24,26 +26,34 @@ async def command_start(message: Message, state: FSMContext):
                                                           resize_keyboard=True,),)
 
 async def process_city(message: Message, state: FSMContext):
+    city_text = message.text
     translator = Translator()
-    city = await translator.translate(message.text)
-    await state.update_data(city=city.text)
+    tr_city_text = await translator.translate(text=city_text)
+    city_text = tr_city_text.text
     url = "https://hotels4.p.rapidapi.com/locations/v2/search"
-    querystring = {"query": city.text, "locale": "en_US", "currency": "USD"}
+    querystring = {"query": city_text, "locale": 'en_US', "currency": "USD"}
     headers = {
         'x-rapidapi-host': "hotels4.p.rapidapi.com",
-        'x-rapidapi-key': "24a18de6fdmsh8128e0141c2e59fp11107bjsn9c0879672d39"
+        'x-rapidapi-key': APIKEY
     }
+    city_not_found = False
     async with ClientSession() as session:
         async with session.get(url, headers=headers, params=querystring) as resp:
             if resp.status == 200:
-                print(await resp.text())
-
-
-
-# async def command_start(message: Message, state: FSMContext):
-#     await state.set_state(Form.name)
-#     await message.answer("Hi there! What's your name?", reply_markup=ReplyKeyboardRemove(),)
-
+                resp_text = await resp.text()
+                resp_json = json.loads(resp_text)
+                try:
+                    city_id = resp_json['suggestions'][0]['entities'][0]['destinationId']
+                except IndexError:
+                    city_not_found = True
+    if city_not_found:
+        await message.reply('К сожалению, не могу найти такого города, попробуйте еще раз...')
+    else:
+        await message.reply(city_id)
+        await message.reply(city_text)
+        await state.update_data(city_text=city_text, city_id=city_id)
+        await state.set_state(HotelBotForm.date_from)
+        # Calendar
 
 async def cancel_handler(message: Message, state: FSMContext) -> None:
     current_state = await state.get_state()
