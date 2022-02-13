@@ -8,67 +8,74 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
 from aiohttp.client import ClientSession
 
-
-from tgbot.keyboards.reply import reply_keyboard
+from tgbot.keyboards.reply import reply_keyboard, btn_config
 from tgbot.misc.aiogoogletrans2.client import Translator
 from tgbot.models.fsm import Form, HotelBotForm
-from tgbot.config import load_config
+from tgbot.config import config
 
-config = load_config('.env')
 ADMINS = config.tg_bot.admin_ids
-
 APIKEY = config.tg_bot.api_token
 
-
-
 async def command_start(message: Message, state: FSMContext):
+    await state.clear()
     await state.set_state(HotelBotForm.init)
     await state.update_data(locale=message.from_user.language_code)
+    main_keyboard = reply_keyboard[:]
+    if message.from_user.id in ADMINS:
+        main_keyboard.append(btn_config)
+    await message.delete()
     await message.answer('Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n'
                          'Я попробую найти для Вас комфортный отель по заданным Вами условиям,'
-                         'и я уверен, у нас все получится! Если Вы готовы, введите название'
+                         'и я уверен, у нас все получится! Если Вы готовы, введите название '
                          'города, в котором Вы планируете остановиться',
-                         reply_markup=ReplyKeyboardMarkup(keyboard=[reply_keyboard],
+                         reply_markup=ReplyKeyboardMarkup(keyboard=[main_keyboard],
                                                           resize_keyboard=True,),)
 
 
+async def command_history(message: Message, state: FSMContext):
+    await message.answer('Здесь будет история поисков')
+    await message.delete()
+
+
+async def command_config(message: Message, state: FSMContext):
+    await message.answer('Здесь будет настройка')
+    await message.delete()
+
+
 async def process_city(message: Message, state: FSMContext):
-    city_text = message.text
-    translator = Translator()
-    tr_city_text = await translator.translate(text=city_text)
-    city_text = tr_city_text.text
-    url = "https://hotels4.p.rapidapi.com/locations/v2/search"
-    querystring = {"query": city_text, "locale": 'en_US', "currency": "USD"}
-    headers = {
-        'x-rapidapi-host': "hotels4.p.rapidapi.com",
-        'x-rapidapi-key': APIKEY
-    }
-    city_not_found = False
-    async with ClientSession() as session:
-        async with session.get(url, headers=headers, params=querystring) as resp:
-            if resp.status == 200:
-                resp_text = await resp.text()
-                resp_json = json.loads(resp_text)
-                try:
-                    city_id = resp_json['suggestions'][0]['entities'][0]['destinationId']
-                except IndexError:
-                    city_not_found = True
-    if city_not_found:
-        await message.reply('К сожалению, не могу найти такого города, попробуйте еще раз...')
-    else:
-        await message.reply(city_id)
-        await message.reply(city_text)
-        await state.update_data(city_text=city_text, city_id=city_id)
-        await state.set_state(HotelBotForm.date_from)
+    pass
+    # city_text = message.text
+    # translator = Translator()
+    # tr_city_text = await translator.translate(text=city_text)
+    # if tr_city_text.src == 'bg' and message.from_user.language_code == 'ru':
+    #     translator = Translator()
+    #     tr_city_text = await translator.translate(text=city_text, src='ru')
+    # city_text = tr_city_text.text
+    # url = "https://hotels4.p.rapidapi.com/locations/v2/search"
+    # querystring = {"query": city_text, "locale": 'en_US', "currency": "USD"}
+    # headers = {
+    #             'x-rapidapi-host': "hotels4.p.rapidapi.com",
+    #             'x-rapidapi-key': APIKEY
+    #           }
+    # async with ClientSession() as session:
+    #     async with session.get(url, headers=headers, params=querystring) as resp:
+    #         if resp.status == 200:
+    #             resp_text = await resp.text()
+    #             resp_json = json.loads(resp_text)
+    #             try:
+    #                 city_id = resp_json['suggestions'][0]['entities'][0]['destinationId']
+    #             except IndexError:
+    #                 city_not_found = True
+    # if city_not_found:
+    #     await message.reply('К сожалению, не могу найти такого города, попробуйте еще раз...')
+    # else:
+    #     await message.reply(city_id)
+    #     await message.reply(city_text)
+    #     await state.update_data(city_text=city_text)
+    #     await state.update_data(city_id=city_id)
+    #     await state.set_state(HotelBotForm.date_from)
         # Calendar
 
-async def cancel_handler(message: Message, state: FSMContext) -> None:
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-    logging.info("Cancelling state %r", current_state)
-    await state.clear()
-    await message.answer('Cancelled.', reply_markup=ReplyKeyboardRemove(),)
 
 async def process_name(message: Message, state: FSMContext):
     await state.update_data(name = message.text)
@@ -130,12 +137,19 @@ async def show_summary(message: Message, data: Dict[str, Any], positive: bool = 
 
 def register_fsm(dp: Router):
     dp.message.register(command_start, Command(commands=["start"]))
-    dp.message.register(cancel_handler, Command(commands=['cancel']) or F.text.casefold() == 'cancel')
+    dp.message.register(command_start, F.text.contains('\U0001F3E0'))
+    dp.message.register(command_history, F.text.contains('\U0001F4C6'))
+    dp.message.register(command_history, Command(commands=['history']))
+    dp.message.register(command_config, (F.text.contains('\U0001F527')), (F.from_user.id.in_(ADMINS)))
+    dp.message.register(command_config, Command(commands=['config']), (F.from_user.id.in_(ADMINS)))
     dp.message.register(process_city, HotelBotForm.init)
-    dp.message.register(process_dont_like_write_bots, Form.like_bots and F.text.casefold() == 'no')
-    dp.message.register(process_like_write_bots, Form.like_bots and F.text.casefold() == 'yes')
-    dp.message.register(process_unknown_write_bots, Form.like_bots)
-    dp.message.register(process_language, Form.language)
+
+
+    #
+    # dp.message.register(process_dont_like_write_bots, Form.like_bots and F.text.casefold() == 'no')
+    # dp.message.register(process_like_write_bots, Form.like_bots and F.text.casefold() == 'yes')
+    # dp.message.register(process_unknown_write_bots, Form.like_bots)
+    # dp.message.register(process_language, Form.language)
 
 
 
