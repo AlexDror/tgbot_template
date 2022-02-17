@@ -1,0 +1,9 @@
+{"inline_keyboard": [[{"text": 2021, "callback_data": "cbcal_0_s_y_2021_2_17"},
+                      {"text": 2022, "callback_data": "cbcal_0_s_y_2022_2_17"}],
+                     [{"text": 2023, "callback_data": "cbcal_0_s_y_2023_2_17"},
+                      {"text": 2024, "callback_data": "cbcal_0_s_y_2024_2_17"}],
+                     [{"text": "<<", "callback_data": "cbcal_0_g_y_2018_2_17"},
+                      {"text": " ", "callback_data": "cbcal_0_n"},
+                      {"text": ">>", "callback_data": "cbcal_0_g_y_2026_2_17"}], []]}
+
+  {"inline_keyboard": [[{"text": 2021, "callback_data": "cbcal_0_s_y_2021_2_17"}, {"text": 2022, "callback_data": "cbcal_0_s_y_2022_2_17"}], [{"text": 2023, "callback_data": "cbcal_0_s_y_2023_2_17"}, {"text": 2024, "callback_data": "cbcal_0_s_y_2024_2_17"}], [{"text": "<<", "callback_data": "cbcal_0_g_y_2018_2_17"}, {"text": " ", "callback_data": "cbcal_0_n"}, {"text": ">>", "callback_data": "cbcal_0_g_y_2026_2_17"}]]}

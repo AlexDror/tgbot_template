@@ -31,7 +31,7 @@ def register_all_handlers(dp: Dispatcher):
 
 async def main():
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
     )
     logger.info("Starting bot")

@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 from typing import Dict, Any
@@ -5,8 +6,10 @@ from typing import Dict, Any
 from aiogram import Router, F, html
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineQuery, \
+    InlineKeyboardMarkup
 from aiohttp.client import ClientSession
+from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 
 from tgbot.keyboards.reply import reply_keyboard, btn_config
 from tgbot.misc.aiogoogletrans2.client import Translator
@@ -43,7 +46,6 @@ async def command_config(message: Message, state: FSMContext):
 
 
 async def process_city(message: Message, state: FSMContext):
-    pass
     # city_text = message.text
     # translator = Translator()
     # tr_city_text = await translator.translate(text=city_text)
@@ -64,6 +66,8 @@ async def process_city(message: Message, state: FSMContext):
     #             resp_json = json.loads(resp_text)
     #             try:
     #                 city_id = resp_json['suggestions'][0]['entities'][0]['destinationId']
+    #                 latitude = resp_json['suggestions'][0]['entities'][0]['latitude']
+    #                 longitude = resp_json['suggestions'][0]['entities'][0]['latitude']
     #             except IndexError:
     #                 city_not_found = True
     # if city_not_found:
@@ -73,9 +77,44 @@ async def process_city(message: Message, state: FSMContext):
     #     await message.reply(city_text)
     #     await state.update_data(city_text=city_text)
     #     await state.update_data(city_id=city_id)
-    #     await state.set_state(HotelBotForm.date_from)
-        # Calendar
+    #     await state.update_data(city_lat=latitude)
+    #     await state.update_data(city_lon=longitude)
+        await state.set_state(HotelBotForm.date_from)
+        calendar_locale = 'ru' if message.from_user.language_code == 'ru' else 'en'
+        min_date = datetime.date.today()
+        calendar, step = DetailedTelegramCalendar().build()
+        calendar = calendar.replace(', []', '')
+        print(calendar)
+        #cal = json.loads(calendar)
+        # cal = {"inline_keyboard": [[{"text": 2021, "callback_data": "cbcal_0_s_y_2021_2_17"}, {"text": 2022, "callback_data": "cbcal_0_s_y_2022_2_17"}], [{"text": 2023, "callback_data": "cbcal_0_s_y_2023_2_17"}, {"text": 2024, "callback_data": "cbcal_0_s_y_2024_2_17"}], [{"text": "<<", "callback_data": "cbcal_0_g_y_2018_2_17"}, {"text": " ", "callback_data": "cbcal_0_n"}, {"text": ">>", "callback_data": "cbcal_0_g_y_2026_2_17"}]]}
+        cal = {"inline_keyboard": [[{"text": '2021', "callback_data": "cbcal_0_s_y_2021_2_17"}]]}
 
+
+
+        await message.answer(text='Выберите {}'.format(LSTEP[step]), reply_markup=cal)
+
+
+        await message.edit_reply_markup(reply_markup=calendar)
+
+async def process_calendar(query: InlineQuery, state: FSMContext):
+    result, key, step = DetailedTelegramCalendar().process(query.data)
+    if not result and key:
+        await query.answer('Выберите {}'.format(LSTEP[step]),
+                                    # query.message.chat.id,
+                                    # query.message.message_id,
+                                    reply_markup=key)
+    elif result:
+        if state == HotelBotForm.date_from:
+            await state.update_data(date_from=result)
+            calendar_locale = 'ru' if query.message.from_user.language_code == 'ru' else 'en'
+            min_date = datetime.datetime.strptime(result, '%Y-%m-%d')
+            calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
+            await query.answer('Выберите {}'.format(LSTEP[step]),
+                                   reply_markup=calendar)
+            await state.set_state(HotelBotForm.date_to)
+        else:
+            await state.update_data(date_from=result)
+            await state.set_state(HotelBotForm.sort_order)
 
 async def process_name(message: Message, state: FSMContext):
     await state.update_data(name = message.text)
@@ -143,6 +182,7 @@ def register_fsm(dp: Router):
     dp.message.register(command_config, (F.text.contains('\U0001F527')), (F.from_user.id.in_(ADMINS)))
     dp.message.register(command_config, Command(commands=['config']), (F.from_user.id.in_(ADMINS)))
     dp.message.register(process_city, HotelBotForm.init)
+    dp.inline_query.register(process_calendar, (HotelBotForm.date_to or HotelBotForm.date_from))
 
 
     #
