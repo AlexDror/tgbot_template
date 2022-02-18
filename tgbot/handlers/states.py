@@ -137,6 +137,7 @@ async def get_hotels_list(state: FSMContext) -> list:
     await state.update_data(hotels_list=hotels_list)
     return hotels_list
 
+
 def message_hotel(hotel: dict) -> tuple:
     pass
 
@@ -160,7 +161,7 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext):
                 date_from = data['date_from']
                 if date_to < date_from:
                     raise ValueError
-                await state.update_data(date_to=result)
+                await state.update_data(date_to=datetime.datetime.strptime(query.text, '%Y-%m-%d'))
                 await state.set_state(HotelBotForm.sort_order)
                 main_keyboard = data['main_keyboard']
                 new_keyboard = search_keyboard[:]
