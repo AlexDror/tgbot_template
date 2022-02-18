@@ -149,10 +149,10 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext):
         print('gjgfk')
         if first:
             try:
-                date_from = datetime.datetime.strptime(query.text, '%Y-%m-%d')
+                date_from = datetime.date.strptime(query.text, '%Y-%m-%d')
                 if date_from < datetime.date.today():
                     raise ValueError
-                await state.update_data(date_from=datetime.datetime.strptime(query.text, '%Y-%m-%d'))
+                await state.update_data(date_from=datetime.date.strptime(query.text, '%Y-%m-%d'))
                 await state.set_state(HotelBotForm.date_to)
             except ValueError:
                 await query.answer('Неверная дата, попробуйте еще раз')
@@ -162,7 +162,7 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext):
                 date_from = data['date_from']
                 if date_to < date_from:
                     raise ValueError
-                await state.update_data(date_to=datetime.datetime.strptime(query.text, '%Y-%m-%d'))
+                await state.update_data(date_to=datetime.date.strptime(query.text, '%Y-%m-%d'))
                 await state.set_state(HotelBotForm.sort_order)
                 main_keyboard = data['main_keyboard']
                 new_keyboard = search_keyboard[:]
