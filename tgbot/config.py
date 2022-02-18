@@ -49,7 +49,7 @@ def load_config(path: str = None):
             database=env.str('DB_NAME')
         ),
         misc=Miscellaneous(
-            max_hotels=env.str(MAX_HOTELS)
+            max_hotels=env.str('MAX_HOTELS')
         )
     )
 

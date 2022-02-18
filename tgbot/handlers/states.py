@@ -145,7 +145,8 @@ def message_hotel(hotel: dict) -> tuple:
 async def process_calendar(query: [CallbackQuery, Message], state: FSMContext):
     first = await state.get_state() == 'HotelBotForm:date_from'
     data = await state.get_data()
-    if isinstance(query, type(Message)):
+    if isinstance(query, Message):
+        print('gjgfk')
         if first:
             try:
                 date_from = datetime.datetime.strptime(query.text, '%Y-%m-%d')
