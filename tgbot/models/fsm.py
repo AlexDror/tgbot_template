@@ -11,6 +11,7 @@ class HotelBotForm(StatesGroup):
     date_from = State()
     date_to = State()
     sort_order = State()
-    set_prices = State()
+    set_price1 = State()
+    set_price2 = State()
     show_result = State()
     show_photo = State()

@@ -21,6 +21,7 @@ class TgBot:
 @dataclass
 class Miscellaneous:
     other_params: str = None
+    max_hotels: str = None
 
 
 @dataclass
@@ -47,7 +48,9 @@ def load_config(path: str = None):
             user=env.str('DB_USER'),
             database=env.str('DB_NAME')
         ),
-        misc=Miscellaneous()
+        misc=Miscellaneous(
+            max_hotels=env.str(MAX_HOTELS)
+        )
     )
 
 async def set_commands(bot: Bot):

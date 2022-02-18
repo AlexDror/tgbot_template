@@ -7,12 +7,14 @@ from aiogram import Router, F, html
 from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton, InlineQuery, \
-    InlineKeyboardMarkup
+    InlineKeyboardMarkup, CallbackQuery
 from aiohttp.client import ClientSession
 from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 
-from tgbot.keyboards.reply import reply_keyboard, btn_config
+from tgbot.keyboards.inline import calendar_keyboard
+from tgbot.keyboards.reply import reply_keyboard, btn_config, search_keyboard
 from tgbot.misc.aiogoogletrans2.client import Translator
+from tgbot.misc.api_locales import hotels_api_locales
 from tgbot.models.fsm import Form, HotelBotForm
 from tgbot.config import config
 
@@ -27,6 +29,7 @@ async def command_start(message: Message, state: FSMContext):
     if message.from_user.id in ADMINS:
         main_keyboard.append(btn_config)
     await message.delete()
+    await state.update_data(main_keyboard=main_keyboard)
     await message.answer('Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n'
                          'Я попробую найти для Вас комфортный отель по заданным Вами условиям,'
                          'и я уверен, у нас все получится! Если Вы готовы, введите название '
@@ -70,51 +73,175 @@ async def process_city(message: Message, state: FSMContext):
     #                 longitude = resp_json['suggestions'][0]['entities'][0]['latitude']
     #             except IndexError:
     #                 city_not_found = True
-    # if city_not_found:
-    #     await message.reply('К сожалению, не могу найти такого города, попробуйте еще раз...')
-    # else:
-    #     await message.reply(city_id)
-    #     await message.reply(city_text)
-    #     await state.update_data(city_text=city_text)
-    #     await state.update_data(city_id=city_id)
-    #     await state.update_data(city_lat=latitude)
-    #     await state.update_data(city_lon=longitude)
+    city_not_found = False
+    city_text = 'Moscow'
+    city_id = '1153093'
+    latitude = 55.55918638239373
+    longitude = 37.363508158852
+    if city_not_found:
+        await message.reply('К сожалению, не могу найти такого города, попробуйте еще раз...')
+    else:
+        await message.reply(city_id)
+        await message.reply(city_text)
+        await state.update_data(city_text=city_text)
+        await state.update_data(city_id=city_id)
+        await state.update_data(city_lat=latitude)
+        await state.update_data(city_lon=longitude)
         await state.set_state(HotelBotForm.date_from)
         calendar_locale = 'ru' if message.from_user.language_code == 'ru' else 'en'
         min_date = datetime.date.today()
-        calendar, step = DetailedTelegramCalendar().build()
-        calendar = calendar.replace(', []', '')
-        print(calendar)
-        #cal = json.loads(calendar)
-        # cal = {"inline_keyboard": [[{"text": 2021, "callback_data": "cbcal_0_s_y_2021_2_17"}, {"text": 2022, "callback_data": "cbcal_0_s_y_2022_2_17"}], [{"text": 2023, "callback_data": "cbcal_0_s_y_2023_2_17"}, {"text": 2024, "callback_data": "cbcal_0_s_y_2024_2_17"}], [{"text": "<<", "callback_data": "cbcal_0_g_y_2018_2_17"}, {"text": " ", "callback_data": "cbcal_0_n"}, {"text": ">>", "callback_data": "cbcal_0_g_y_2026_2_17"}]]}
-        cal = {"inline_keyboard": [[{"text": '2021', "callback_data": "cbcal_0_s_y_2021_2_17"}]]}
+        calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
+        await message.answer(text='Выберите дату заезда', reply_markup=calendar_keyboard(calendar))
 
 
+async def get_hotels_list(state: FSMContext) -> list:
+    data = await state.get_data()
+    city_id = data['city_id']
+    max_hotels = config.misc.max_hotels
+    check_in = datetime.date.strftime(data['date_from'], '%Y-%m-%d')
+    check_out = datetime.date.strftime(data['date_to'], '%Y-%m-%d')
+    adults1 = '1'
+    price_min = data.get('lowprice', 0)
+    price_max = data.get('highprice', 0)
+    currency = 'USD'
+    order = data.get('order', 'lowprice')
+    if order == 'highprice':
+        sort_order = 'PRICE_HIGHEST_FIRST'
+    elif order == 'bestdeal':
+        sort_order = 'DISTANCE_FROM_LANDMARK'
+    else:
+        sort_order = 'PRICE'
+    locale = hotels_api_locales.get(data['locale'], 'en_US')
+    url = "https://hotels4.p.rapidapi.com/properties/list"
 
-        await message.answer(text='Выберите {}'.format(LSTEP[step]), reply_markup=cal)
+    querystring = {"destinationId": city_id, "pageNumber": "1", "pageSize": max_hotels, "checkIn": check_in,
+                   "checkOut": check_out, "adults1": adults1, "priceMin": "20", "priceMax": "3000", "sortOrder": sort_order,
+                   "locale": locale, "currency": currency}
+    if price_max != 0:
+        querystring.update(priceMin=str(price_min), priceMax=str(price_max))
+
+    headers = {
+        'x-rapidapi-host': "hotels4.p.rapidapi.com",
+        'x-rapidapi-key': "24a18de6fdmsh8128e0141c2e59fp11107bjsn9c0879672d39"
+    }
+    async with ClientSession() as session:
+        async with session.get(url, headers=headers, params=querystring) as resp:
+            if resp.status == 200:
+                resp_text = await resp.text()
+                resp_json = json.loads(resp_text)
+            else:
+                return
+    hotels_list = resp_json['data']['body']['searchResults']['results']
+    if order == 'bestdeal':
+        hotels_list.sort(key=lambda x: x['ratePlan']['price']['exactCurrent'])
+    await state.update_data(hotels_list=hotels_list)
+    return hotels_list
+
+def message_hotel(hotel: dict) -> tuple:
+    pass
 
 
-        await message.edit_reply_markup(reply_markup=calendar)
-
-async def process_calendar(query: InlineQuery, state: FSMContext):
-    result, key, step = DetailedTelegramCalendar().process(query.data)
+async def process_calendar(query: [CallbackQuery, Message], state: FSMContext):
+    first = await state.get_state() == 'HotelBotForm:date_from'
+    data = await state.get_data()
+    if isinstance(query, type(Message)):
+        if first:
+            try:
+                date_from = datetime.datetime.strptime(query.text, '%Y-%m-%d')
+                if date_from < datetime.date.today():
+                    raise ValueError
+                await state.update_data(date_from=datetime.datetime.strptime(query.text, '%Y-%m-%d'))
+                await state.set_state(HotelBotForm.date_to)
+            except ValueError:
+                await query.answer('Неверная дата, попробуйте еще раз')
+        else:
+            try:
+                date_to = datetime.datetime.strptime(query.text, '%Y-%m-%d')
+                date_from = data['date_from']
+                if date_to < date_from:
+                    raise ValueError
+                await state.update_data(date_to=result)
+                await state.set_state(HotelBotForm.sort_order)
+                main_keyboard = data['main_keyboard']
+                new_keyboard = search_keyboard[:]
+                new_keyboard.append(main_keyboard)
+                await query.answer('Выберите, как отсортировать для Вас отели', reply_markup=ReplyKeyboardMarkup(keyboard=new_keyboard, resize_keyboard=True,))
+            except ValueError:
+                await query.answer('Неверная дата, попробуйте еще раз')
+        return
+    locale = data['locale']
+    min_date = data.get('date_from', datetime.date.today().today())
+    calendar_locale = 'ru' if locale == 'ru' else 'en'
+    result, key, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).process(query.data)
     if not result and key:
-        await query.answer('Выберите {}'.format(LSTEP[step]),
-                                    # query.message.chat.id,
-                                    # query.message.message_id,
-                                    reply_markup=key)
+        await query.message.edit_reply_markup(reply_markup=calendar_keyboard(key))
     elif result:
-        if state == HotelBotForm.date_from:
+        if first:
             await state.update_data(date_from=result)
-            calendar_locale = 'ru' if query.message.from_user.language_code == 'ru' else 'en'
-            min_date = datetime.datetime.strptime(result, '%Y-%m-%d')
             calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
-            await query.answer('Выберите {}'.format(LSTEP[step]),
-                                   reply_markup=calendar)
+            await query.message.edit_text('Выберите дату выезда')
+            await query.message.edit_reply_markup(reply_markup=calendar_keyboard(calendar))
             await state.set_state(HotelBotForm.date_to)
         else:
-            await state.update_data(date_from=result)
+            await query.message.delete()
+            await state.update_data(date_to=result)
             await state.set_state(HotelBotForm.sort_order)
+            main_keyboard = data['main_keyboard']
+            new_keyboard = search_keyboard[:]
+            new_keyboard.append(main_keyboard)
+            await query.message.answer('Выбран период:\n' +
+                                       'C  ' + datetime.datetime.strftime(data['date_from'], '%Y-%m-%d') +\
+                                       '\nпо  ' + datetime.datetime.strftime(result, '%Y-%m-%d'))
+            await query.message.answer('Выберите, как отсортировать для Вас отели', reply_markup=ReplyKeyboardMarkup(keyboard=new_keyboard, resize_keyboard=True,))
+
+
+async def process_lowprice(message: Message, state: FSMContext):
+    message.delete()
+    await state.update_data(order='lowprice')
+    data = await state.get_data()
+    main_keyboard = data['main_keyboard']
+    await message.answer('Начинаю искать...', reply_markup=ReplyKeyboardMarkup(keyboard=[main_keyboard], resize_keyboard=True,),)
+    await state.set_state(HotelBotForm.show_result)
+
+async def process_highprice(message: Message, state: FSMContext):
+    message.delete()
+    await state.update_data(order='highprice')
+    data = await state.get_data()
+    main_keyboard = data['main_keyboard']
+    await message.answer('Начинаю искать...', reply_markup=ReplyKeyboardMarkup(keyboard=[main_keyboard], resize_keyboard=True,),)
+    await state.set_state(HotelBotForm.show_result)
+
+async def process_bestdeal(message: Message, state: FSMContext):
+    message.delete()
+    await state.update_data(order='bestdeal')
+    data = await state.get_data()
+    main_keyboard = data['main_keyboard']
+    await message.answer('Начинаю искать...', reply_markup=ReplyKeyboardMarkup(keyboard=[main_keyboard], resize_keyboard=True,),)
+    await state.set_state(HotelBotForm.show_result)
+
+
+async def process_setprices(message:Message, state:FSMContext):
+    message.delete()
+    await state.set_state(HotelBotForm.set_price1)
+    await message.answer('Введите минимальную цену: ')
+
+async def process_set_min_price(message:Message, state:FSMContext):
+    await state.update_data(lowprice=abs(int(message.text)))
+    await state.set_state(HotelBotForm.set_price2)
+    await message.answer('Введите максимальную цену:')
+
+async def process_set_max_price(message:Message, state:FSMContext):
+    data = await state.get_data()
+    lowprice = data.get('lowprice', 0)
+    highprice = abs(int(message.text))
+    if highprice < lowprice:
+        await message.answer('Неверно заданы границы, попробуйте еще раз...')
+        return
+    await state.update_data(highprice=abs(int(message.text)))
+    await state.set_state(HotelBotForm.sort_order)
+
+
+
 
 async def process_name(message: Message, state: FSMContext):
     await state.update_data(name = message.text)
@@ -182,7 +309,18 @@ def register_fsm(dp: Router):
     dp.message.register(command_config, (F.text.contains('\U0001F527')), (F.from_user.id.in_(ADMINS)))
     dp.message.register(command_config, Command(commands=['config']), (F.from_user.id.in_(ADMINS)))
     dp.message.register(process_city, HotelBotForm.init)
-    dp.inline_query.register(process_calendar, (HotelBotForm.date_to or HotelBotForm.date_from))
+    dp.callback_query.register(process_calendar, DetailedTelegramCalendar.func())
+    dp.message.register(process_calendar, F.regexp(r'(19|20)\d\d-((0[1-9]|1[012])-(0[1-9]|[12]\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)'))
+    dp.message.register(process_lowprice, Command(commands=['lowprice']))
+    dp.message.register(process_highprice, Command(commands=['highprice']))
+    dp.message.register(process_bestdeal, Command(commands=['bestdeal']))
+    dp.message.register(process_setprices, Command(commands=['setprices']))
+    dp.message.register(process_lowprice, F.text.contains('\U0001F4C8'))
+    dp.message.register(process_highprice, F.text.contains('\U0001F4C9'))
+    dp.message.register(process_bestdeal, F.text.contains('\U0001F44D'))
+    dp.message.register(process_setprices, F.text.contains('\U0001F4B5'))
+    dp.message.register(process_set_min_price, F.text.isdigit(), HotelBotForm.set_price1)
+    dp.message.register(process_set_max_price, F.text.isdigit(), HotelBotForm.set_price2)
 
 
     #
