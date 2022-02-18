@@ -311,7 +311,7 @@ def register_fsm(dp: Router):
     dp.message.register(command_config, Command(commands=['config']), (F.from_user.id.in_(ADMINS)))
     dp.message.register(process_city, HotelBotForm.init)
     dp.callback_query.register(process_calendar, DetailedTelegramCalendar.func())
-    dp.message.register(process_calendar, F.regexp(r'(19|20)\d\d-((0[1-9]|1[012])-(0[1-9]|[12]\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)'))
+    dp.message.register(process_calendar, F.text.regexp(r'(19|20)\d\d-((0[1-9]|1[012])-(0[1-9]|[12]\d)|(0[13-9]|1[012])-30|(0[13578]|1[02])-31)'))
     dp.message.register(process_lowprice, Command(commands=['lowprice']))
     dp.message.register(process_highprice, Command(commands=['highprice']))
     dp.message.register(process_bestdeal, Command(commands=['bestdeal']))
