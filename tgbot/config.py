@@ -20,8 +20,9 @@ class TgBot:
 
 @dataclass
 class Miscellaneous:
-    other_params: str = None
     max_hotels: str = None
+    currency: str = None
+    app_name: str = None
 
 
 @dataclass
@@ -49,7 +50,9 @@ def load_config(path: str = None):
             database=env.str('DB_NAME')
         ),
         misc=Miscellaneous(
-            max_hotels=env.str('MAX_HOTELS')
+            max_hotels = env.str('MAX_HOTELS'),
+            currency=env.str('CURRENCY'),
+            app_name = env.str('APP_NAME')
         )
     )
 

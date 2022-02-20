@@ -15,3 +15,4 @@ class HotelBotForm(StatesGroup):
     set_price2 = State()
     show_result = State()
     show_photo = State()
+    config = State()

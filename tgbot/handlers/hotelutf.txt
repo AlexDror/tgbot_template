@@ -1,0 +1,1729 @@
+[
+    {
+        "id": 1219660160,
+        "name": "Хостел Bed&Beer Таганка",
+        "starRating": 1.5,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Александра Солженицына, 31-2 ",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "109004",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 6.0,
+            "rating": "6,0",
+            "total": 30,
+            "scale": 10,
+            "badge": "good",
+            "badgeText": "Хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "3,4 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "8,4 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$9",
+                "exactCurrent": 8.7,
+                "old": "$10",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Таганский",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.74542,
+            "lon": 37.66611
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 38083130,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/39000000/38090000/38083200/38083130/73e39fa2_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1576205920,
+        "name": "Хостел Travel Inn на Преображенской",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Девятая Рота, 6, стр. 2",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "107061",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 6.6,
+            "rating": "6,6",
+            "total": 3,
+            "scale": 10,
+            "badge": "good",
+            "badgeText": "Хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "7,3 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "12 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$12",
+                "exactCurrent": 11.85,
+                "old": "$13",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Преображенское",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "newhotel|D13",
+        "coordinate": {
+            "lat": 55.79205,
+            "lon": 37.71299
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 49225185,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/50000000/49230000/49225200/49225185/39d5a4d5_y.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1770270976,
+        "name": "Хостел «Travel Inn Электрозаводская»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Попов проезд, 4",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "107014",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "6,0 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "11 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$13",
+                "exactCurrent": 12.9,
+                "old": "$14",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Сокольники",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "D13",
+        "coordinate": {
+            "lat": 55.785091,
+            "lon": 37.697325
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 55289718,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/56000000/55290000/55289800/55289718/4eae33b2_y.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 927001696,
+        "name": "Трэвел Инн Достоевская",
+        "starRating": 1.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Октябрьский пер., 23",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "127018",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 5.0,
+            "rating": "5,0",
+            "total": 2,
+            "scale": 10
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "3,5 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "6,4 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$13",
+                "exactCurrent": 13.17,
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Марьина Роща",
+        "deals": {},
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.7879,
+            "lon": 37.61147
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 28937553,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/29000000/28940000/28937600/28937553/25558031_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 773738752,
+        "name": "Хостел «Фортуна Инн»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Октябрьский пер., 12",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "127018",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "3,4 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "6,4 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$13",
+                "exactCurrent": 13.23,
+                "old": "$15",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Марьина Роща",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.78741,
+            "lon": 37.61188
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 24148086,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/25000000/24150000/24148100/24148086/b641783b_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 927016800,
+        "name": "Трэвел Инн Новослободская",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Obraztsova st. 14",
+            "extendedAddress": "",
+            "locality": "Moscow",
+            "postalCode": "127055",
+            "region": "",
+            "countryName": "Russia",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 2.0,
+            "rating": "2,0",
+            "total": 1,
+            "scale": 10
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "3,5 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "6,3 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$14",
+                "exactCurrent": 13.53,
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Марьина Роща",
+        "deals": {},
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.78789,
+            "lon": 37.61083
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 28938025,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/29000000/28940000/28938100/28938025/3287918d_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1576233280,
+        "name": "Хостел Travel Inn Серпуховская",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Большая Серпуховская, 31, корп. 6",
+            "extendedAddress": "",
+            "locality": "Московская обл.",
+            "postalCode": "115093",
+            "region": "Московская обл.",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 10.0,
+            "rating": "10,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "exceptional",
+            "badgeText": "Великолепно"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "3,8 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "6,8 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$15",
+                "exactCurrent": 14.64,
+                "old": "$16",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Замоскворечье",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {
+            "scarcity": "4 осталось в нашем приложении"
+        },
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|HRW",
+        "coordinate": {
+            "lat": 55.723379,
+            "lon": 37.628577
+        },
+        "roomsLeft": 4,
+        "providerType": "LOCAL",
+        "supplierHotelId": 49226040,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/50000000/49230000/49226100/49226040/197e28d3_y.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 927058496,
+        "name": "Хостел Russland",
+        "starRating": 1.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Oktyabrskiy per. 23",
+            "extendedAddress": "",
+            "locality": "Moscow",
+            "postalCode": "127018",
+            "region": "",
+            "countryName": "Russia",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "3,5 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "6,3 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$15",
+                "exactCurrent": 14.73,
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Марьина Роща",
+        "deals": {},
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.78777,
+            "lon": 37.61125
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 28939328,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/29000000/28940000/28939400/28939328/2b4089c7_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1157847680,
+        "name": "Хостел «Гай-Дай»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Ярославская, 8, стр. 7",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "129164",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 3.0,
+            "rating": "3,0",
+            "total": 2,
+            "scale": 10
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "7,1 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "10 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$15",
+                "exactCurrent": 15.48,
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Алексеевский",
+        "deals": {},
+        "messaging": {
+            "scarcity": "3 осталось в нашем приложении"
+        },
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.81785,
+            "lon": 37.64745
+        },
+        "roomsLeft": 3,
+        "providerType": "LOCAL",
+        "supplierHotelId": 36151490,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/37000000/36160000/36151500/36151490/77d8d07c_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 974921856,
+        "name": "Хостелы «Рус» — Бакунинская",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Moscow, bakuninskaya 70",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "105082",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 8.0,
+            "rating": "8,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "very-good",
+            "badgeText": "Очень хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "5,3 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "10 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$16",
+                "exactCurrent": 15.69,
+                "old": "$17",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Басманный",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.77817,
+            "lon": 37.69076
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 30435058,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/31000000/30440000/30435100/30435058/27c77793_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1576222336,
+        "name": "Хостел Travel Inn Красные Ворота",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Новая Басманная, 1, стр. 10",
+            "extendedAddress": "4-й этаж",
+            "locality": "Москва",
+            "postalCode": "107078",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 8.0,
+            "rating": "8,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "very-good",
+            "badgeText": "Очень хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "2,7 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "7,8 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$16",
+                "exactCurrent": 15.69,
+                "old": "$17",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Басманный",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {
+            "scarcity": "2 осталось в нашем приложении"
+        },
+        "badging": {},
+        "pimmsAttributes": "D13",
+        "coordinate": {
+            "lat": 55.768176,
+            "lon": 37.653431
+        },
+        "roomsLeft": 2,
+        "providerType": "LOCAL",
+        "supplierHotelId": 49225698,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/50000000/49230000/49225700/49225698/3da9c1fd_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1730113344,
+        "name": "Хостел «Измайловский парк»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Измайловский пр., 14, корп. 2",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "105037",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 10.0,
+            "rating": "10,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "exceptional",
+            "badgeText": "Великолепно"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "11 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "16 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$17",
+                "exactCurrent": 17.43,
+                "old": "$19",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "HC"
+        },
+        "neighbourhood": "Измайлово",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "D13",
+        "coordinate": {
+            "lat": 55.795882,
+            "lon": 37.769366
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 54034792,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/55000000/54040000/54034800/54034792/f780f035_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1420050368,
+        "name": "Хостел Lodging Center",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Ржавки, 48",
+            "extendedAddress": "",
+            "locality": "Ржавки",
+            "postalCode": "141552",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "37 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "35 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$17",
+                "exactCurrent": 17.43,
+                "old": "$19",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Ржавки",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {
+            "scarcity": "4 осталось в нашем приложении"
+        },
+        "badging": {},
+        "pimmsAttributes": "D13",
+        "coordinate": {
+            "lat": 56.013111,
+            "lon": 37.226128
+        },
+        "roomsLeft": 4,
+        "providerType": "LOCAL",
+        "supplierHotelId": 44345324,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/45000000/44350000/44345400/44345324/d93f32ab_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1081948768,
+        "name": "Отель Fortuna Inn Добрынинская",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Люсиновская, 39, стр. 5",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "115093",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "3,8 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "6,6 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$18",
+                "exactCurrent": 17.82,
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Замоскворечье",
+        "deals": {},
+        "messaging": {
+            "scarcity": "1 остался в нашем приложении"
+        },
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.72257,
+            "lon": 37.62373
+        },
+        "roomsLeft": 1,
+        "providerType": "LOCAL",
+        "supplierHotelId": 33779649,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/34000000/33780000/33779700/33779649/72d04dd5_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1574372160,
+        "name": "Хостел Travel",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "пер. Красина, 15, стр. 1",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "123056",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 10.0,
+            "rating": "10,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "exceptional",
+            "badgeText": "Великолепно"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "2,2 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "3,7 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$18",
+                "exactCurrent": 18.03,
+                "old": "$20",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "HC"
+        },
+        "neighbourhood": "Пресненский",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "coordinate": {
+            "lat": 55.767295,
+            "lon": 37.5846
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 49167880,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/50000000/49170000/49167900/49167880/5ec6d2ff_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 938119456,
+        "name": "Хостел на Нахимовском проспекте",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Azovskaya str., 13",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "117149",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "11 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "11 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$19",
+                "exactCurrent": 19.38,
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Зюзино",
+        "deals": {},
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.65738,
+            "lon": 37.59967
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 29284983,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/30000000/29290000/29285000/29284983/c13eb9f6_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1503017760,
+        "name": "Хостел на Академика Анохина 13",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Академика Анохина, 13",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "119571",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "14 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "11 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$20",
+                "exactCurrent": 19.59,
+                "old": "$22",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "HC"
+        },
+        "neighbourhood": "Москва",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "coordinate": {
+            "lat": 55.656458,
+            "lon": 37.472181
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 46938055,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/47000000/46940000/46938100/46938055/36a2820c_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1458022624,
+        "name": "Хостел «Берег»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Варшавское ш., 29, стр. 1",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "117105",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 10.0,
+            "rating": "10,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "exceptional",
+            "badgeText": "Великолепно"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "7,1 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "8,6 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$20",
+                "exactCurrent": 20.04,
+                "old": "$22",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "HC"
+        },
+        "neighbourhood": "Южный административный округ",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "coordinate": {
+            "lat": 55.693237,
+            "lon": 37.621891
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 45531957,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/46000000/45540000/45532000/45531957/109d9172_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1912691968,
+        "name": "Хостел «Плацкарт» ",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Пятницкое ш., 35",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "125430",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 8.0,
+            "rating": "8,0",
+            "total": 2,
+            "scale": 10,
+            "badge": "very-good",
+            "badgeText": "Очень хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "19 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "16 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$20",
+                "exactCurrent": 20.37,
+                "old": "$23",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "HC"
+        },
+        "neighbourhood": "Митино",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "D13|HRW",
+        "coordinate": {
+            "lat": 55.852792,
+            "lon": 37.36035
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 59740374,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/60000000/59750000/59740400/59740374/d56c1290_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 679411680,
+        "name": "Хостел «Винегрет»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Арбат, 4, стр. 1",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "119019",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 8.4,
+            "rating": "8,4",
+            "total": 23,
+            "scale": 10,
+            "badge": "very-good",
+            "badgeText": "Очень хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "1,2 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "4,1 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$21",
+                "exactCurrent": 20.73,
+                "old": "$23",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "HC"
+        },
+        "neighbourhood": "Центр Москвы",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "coordinate": {
+            "lat": 55.751952,
+            "lon": 37.598285
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 21200365,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/22000000/21210000/21200400/21200365/3afc35cd_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 849206624,
+        "name": "Хостел «АРАЛ — Волгоградский»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Талалихина, 41, стр. 26",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "109316",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 10.0,
+            "rating": "10,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "exceptional",
+            "badgeText": "Великолепно"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "5,7 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "10 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$21",
+                "exactCurrent": 20.88,
+                "old": "$23",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Нижегородский",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.72881,
+            "lon": 37.692
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 26506457,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/27000000/26510000/26506500/26506457/6fec6316_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1201410976,
+        "name": "Хостел HotelHot «Бауманская»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Спартаковская, 6, стр. 2",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "105066",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "4,0 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "9,1 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$21",
+                "exactCurrent": 20.88,
+                "old": "$23",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Басманный",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {
+            "scarcity": "3 осталось в нашем приложении"
+        },
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.7713,
+            "lon": 37.6735
+        },
+        "roomsLeft": 3,
+        "providerType": "LOCAL",
+        "supplierHotelId": 37512843,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/38000000/37520000/37512900/37512843/9c328341_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1266104480,
+        "name": "Хостел «Пикассо»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Лефортовский Вал, 24Б",
+            "extendedAddress": "ул. Лефортовский Вал, 24Б",
+            "locality": "Москва",
+            "postalCode": "111250",
+            "region": "Московская обл.",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 8.0,
+            "rating": "8,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "very-good",
+            "badgeText": "Очень хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "5,1 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "10 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$21",
+                "exactCurrent": 20.88,
+                "old": "$23",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Юго-Восточный административный округ",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13",
+        "coordinate": {
+            "lat": 55.756405,
+            "lon": 37.696572
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 39534515,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/40000000/39540000/39534600/39534515/27ae3dd6_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 718400448,
+        "name": "Мини-отель «Тарлеон»",
+        "starRating": 2.5,
+        "urls": {},
+        "address": {
+            "streetAddress": "ул. Авиамоторная, 44",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "111024",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 6.0,
+            "rating": "6,0",
+            "total": 2,
+            "scale": 10,
+            "badge": "good",
+            "badgeText": "Хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "6,8 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "12 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$22",
+                "exactCurrent": 22.07,
+                "old": "$25",
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": true,
+                "paymentPreference": true,
+                "noCCRequired": false
+            },
+            "type": "Dual"
+        },
+        "neighbourhood": "Юго-Восточный административный округ",
+        "deals": {
+            "secretPrice": {
+                "dealText": "Экономьте больше с нашими секретными ценами!"
+            },
+            "priceReasoning": "DRR-443"
+        },
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13|TESCO",
+        "coordinate": {
+            "lat": 55.73929,
+            "lon": 37.71943
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 22418764,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/23000000/22420000/22418800/22418764/fbf75ecf_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    },
+    {
+        "id": 1417486656,
+        "name": "Хостел «Ленин»",
+        "starRating": 2.0,
+        "urls": {},
+        "address": {
+            "streetAddress": "Ленинский пр-т, 152",
+            "extendedAddress": "",
+            "locality": "Москва",
+            "postalCode": "119571",
+            "region": "",
+            "countryName": "Россия",
+            "countryCode": "ru",
+            "obfuscate": false
+        },
+        "welcomeRewards": {
+            "collect": true
+        },
+        "guestReviews": {
+            "unformattedRating": 8.0,
+            "rating": "8,0",
+            "total": 1,
+            "scale": 10,
+            "badge": "very-good",
+            "badgeText": "Очень хорошо"
+        },
+        "landmarks": [
+            {
+                "label": "Центр города",
+                "distance": "14 км"
+            },
+            {
+                "label": "Третье транспортное кольцо",
+                "distance": "11 км"
+            }
+        ],
+        "geoBullets": [],
+        "ratePlan": {
+            "price": {
+                "current": "$23",
+                "exactCurrent": 22.65,
+                "info": "за 1 номер на 3 суток",
+                "summary": "включая налоги и сборы"
+            },
+            "features": {
+                "freeCancellation": false,
+                "paymentPreference": false,
+                "noCCRequired": false
+            },
+            "type": "EC"
+        },
+        "neighbourhood": "Москва",
+        "deals": {},
+        "messaging": {},
+        "badging": {},
+        "pimmsAttributes": "DoubleStamps|D13",
+        "coordinate": {
+            "lat": 55.654188,
+            "lon": 37.49003
+        },
+        "providerType": "LOCAL",
+        "supplierHotelId": 44265208,
+        "isAlternative": false,
+        "optimizedThumbUrls": {
+            "srpDesktop": "https://exp.cdn-hotels.com/hotels/45000000/44270000/44265300/44265208/63ba7b34_z.jpg?impolicy=fcrop&w=250&h=140&q=high"
+        }
+    }
+]
