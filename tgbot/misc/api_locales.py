@@ -1,3 +1,6 @@
+"""
+Локали hotels.com и их соответствие локалям телеграма
+"""
 hotels_api_locales: dict = {'en': 'en_US', 'es': 'es_ES', 'pt': 'pt_PT', 'fr': 'fr_FR', 'nl': 'nl_NL', 'de': 'de_DE',
                       'hr': 'hr_HR','cs': 'cs_CZ', 'da': 'da_DK', 'et': 'et_EE', 'fi': 'fi_FI', 'el': 'el_GR',
                       'hu': 'hu_HU', 'is': 'is_IS', 'it': 'it_IT', 'lv': 'lv_LV', 'lt': 'lt_LT', 'no': 'no_NO',

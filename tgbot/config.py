@@ -1,11 +1,16 @@
+"""
+Конфигурация бота и установка команд
+"""
 from dataclasses import dataclass
 
 from aiogram import Bot
-from aiogram.types import BotCommand
 from environs import Env
 
 @dataclass
 class DbConfig:
+    """
+    Конфигурация соединения с БД
+    """
     host: str
     password: str
     user: str
@@ -13,6 +18,9 @@ class DbConfig:
 
 @dataclass
 class TgBot:
+    """
+    Конфигурация бота
+    """
     token: str
     admin_ids: list[int]
     use_redis: bool
@@ -20,20 +28,34 @@ class TgBot:
 
 @dataclass
 class Miscellaneous:
+    """
+    Дополнительные параметры конфигурации
+    """
     max_hotels: str = None
     currency: str = None
+    currency_sym: str = None
     app_name: str = None
+    show_thumbnails: str = None
+    hotels_per_page: str = None
+    pictures_per_page: str = None
+    show_venue: str = None
 
 
 @dataclass
 class Config:
+    """
+    Все вместе
+    """
     tg_bot: TgBot
     db: DbConfig
     misc: Miscellaneous
 
 
 def load_config(path: str = None):
-    env = Env()
+    """
+    Загрузка данных из конфигурационного файла
+    """
+    env: Env = Env()
     env.read_env(path)
 
     return Config(
@@ -51,12 +73,21 @@ def load_config(path: str = None):
         ),
         misc=Miscellaneous(
             max_hotels = env.str('MAX_HOTELS'),
-            currency=env.str('CURRENCY'),
-            app_name = env.str('APP_NAME')
+            currency = env.str('CURRENCY'),
+            currency_sym = env.str('CURRENCY_SYM'),
+            show_thumbnails = env.str('SHOW_THUMBNAILS'),
+            hotels_per_page = env.str('HOTELS_PER_PAGE'),
+            app_name = env.str('APP_NAME'),
+            pictures_per_page = env.str('PICTURES_PER_PAGE'),
+            show_venue = env.str('SHOW_VENUE')
+
         )
     )
 
 async def set_commands(bot: Bot):
+    """
+    Установка команд
+    """
     await bot.set_my_commands([{'command':'start', 'description':'Начало поиска'},
                                {'command': 'help', 'description':'Помощь'},
                                {'command': 'lowprice', 'description':'По возрастанию цены'},
