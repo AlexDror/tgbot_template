@@ -4,6 +4,7 @@
 
 import datetime
 import json
+from difflib import SequenceMatcher
 from math import ceil, pi, cos, sqrt, asin
 from typing import Any
 
@@ -34,6 +35,7 @@ APIKEY: str = config.tg_bot.api_token
 sticker_id: str = 'CAACAgIAAxkBAAIFaWIQoWdm_f-gOqa-T-wXBsjD5LRmAAJQCwACLw_wBqRaqc_7Le0YIwQ'
 date_check_re: str = r'(19|20)\d\d-((0[1-9]|1[012])-(0[1-9]|[12]\d)|(0[13-9]|1[012])-30|'+\
                      '(0[13578]|1[02])-31)'
+
 
 async def command_start(message: Message, state: FSMContext) -> None:
     """
@@ -194,9 +196,14 @@ async def process_city(message: Message, state: FSMContext) -> None:
                 resp_text: str = await resp.text()
                 resp_json: dict = json.loads(resp_text)
                 try:
-                    city_id: str = resp_json['suggestions'][0]['entities'][0]['destinationId']
+                    temp_cities: dict = {}
+                    for entity in resp_json['suggestions'][0]['entities']:
+                        # Угадай, блядь, что задумали пидарасы из hotels.com
+                        temp_cities[entity['destinationId']] = SequenceMatcher(None,city_text.lower(),entity['name'].lower()).ratio()
+                    city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
                 except IndexError:
                     city_not_found: bool = True
+    print(city_id)
     location: Any = None
     while True:
         # Не всегда сервера геокодинга с первого раза отвечают
@@ -231,6 +238,9 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
     Сохраняет значения дат въезда и выезда из отеля, количество ночей.
     """
     async def finish(message, date_1, date_2) -> None:
+        """
+        Вспомогательная процедура
+        """
         await state.update_data(date_to=date_1)
         nights: int = max((date_1 - date_2).days, 1)
         await state.update_data(nights=nights)
@@ -461,7 +471,7 @@ async def photo_page_callback(query: CallbackQuery, state: FSMContext) -> None:
                                                                          current_page=page,
                                                                          data_pattern='picture#{page}')
             paginator.add_after(InlineKeyboardButton('\U0000274C Закрыть', callback_data='back'))
-            await state.bot.edit_message_media(media = InputMedia(type='photo',
+            await state.bot.edit_message_media(media=InputMedia(type='photo',
                                                                   media=album[page-1]),
                                                chat_id=query.message.chat.id,
                                                message_id=query.message.message_id,

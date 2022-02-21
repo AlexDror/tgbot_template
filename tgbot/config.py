@@ -72,12 +72,12 @@ def load_config(path: str = None):
             database=env.str('DB_NAME')
         ),
         misc=Miscellaneous(
-            max_hotels = env.str('MAX_HOTELS'),
-            currency = env.str('CURRENCY'),
-            currency_sym = env.str('CURRENCY_SYM'),
-            show_thumbnails = env.str('SHOW_THUMBNAILS'),
-            hotels_per_page = env.str('HOTELS_PER_PAGE'),
-            app_name = env.str('APP_NAME'),
+            max_hotels=env.str('MAX_HOTELS'),
+            currency=env.str('CURRENCY'),
+            currency_sym=env.str('CURRENCY_SYM'),
+            show_thumbnails=env.str('SHOW_THUMBNAILS'),
+            hotels_per_page=env.str('HOTELS_PER_PAGE'),
+            app_name=env.str('APP_NAME'),
             pictures_per_page = env.str('PICTURES_PER_PAGE'),
             show_venue = env.str('SHOW_VENUE')
 
