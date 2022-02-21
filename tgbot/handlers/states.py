@@ -18,6 +18,7 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, \
                           CallbackQuery, InputMedia
 from aiohttp.client import ClientSession
+from motor.motor_asyncio import AsyncIOMotorClient
 
 from telegram_bot_calendar import DetailedTelegramCalendar
 from telegram_bot_pagination import InlineKeyboardPaginator, InlineKeyboardButton
@@ -53,7 +54,6 @@ async def command_start(message: Message, state: FSMContext) -> None:
     main_keyboard: list = reply_keyboard[:]
     if message.from_user.id in ADMINS:
         main_keyboard.append(btn_config)
-    await message.delete()
     await state.update_data(main_keyboard=main_keyboard)
     await message.answer('Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n'
                          'Я попробую найти для Вас комфортный отель по заданным Вами условиям,'
@@ -61,14 +61,15 @@ async def command_start(message: Message, state: FSMContext) -> None:
                          'города, в котором Вы планируете остановиться',
                          reply_markup=ReplyKeyboardMarkup(keyboard=[main_keyboard],
                                                           resize_keyboard=True,),)
+    await message.delete()
 
 
 async def command_history(message: Message, state: FSMContext) -> None:
     """
     Хендлер показа истории запросов
     """
-    await message.delete()
     await message.answer('Здесь будет история поисков')
+    await message.delete()
 
 
 async def command_config(message: Message, state: FSMContext) -> None:
@@ -76,8 +77,7 @@ async def command_config(message: Message, state: FSMContext) -> None:
     Хендлер админского меню конфигурирования параметров бота
     Сохраняет значение состояния, откуда был вызван и список сообщений для последующего удаления
     """
-    await message.delete()
-    config_messages: list = []
+    config_messages: list = [message]
     config_messages.append(await message.answer('Здесь можно настроить дополнительные'+
                                                 'параметры бота'))
     config_messages.append(await message.answer('Доступны следующие параметры:'))
@@ -110,7 +110,6 @@ async def command_show(message: Message, state: FSMContext) -> None:
     В зависимости от установленных параметров выводит информацию с картинкой или без,
     квантами заданного размера
     """
-    await message.delete()
     data: dict = await state.get_data()
     hotels_list: list = data.get('hotels_list')
     hotels_shown: list = data.get('hotels_shown')
@@ -135,14 +134,15 @@ async def command_show(message: Message, state: FSMContext) -> None:
         reply_kb:ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[data.get('main_keyboard')],
                                                            resize_keyboard=True)
         await message.answer(text='Конец', reply_markup=reply_kb)
+    await message.delete()
 
 
 async def command_help(message: Message, state: FSMContext) -> None:
     """
     Хендлер команды help
     """
+    await message.answer('Бог поможет... А я просто бот.')
     await message.delete()
-    await message.answer('Бог в помощь...')
 
 
 async def process_config(message: Message, state: FSMContext) -> None:
@@ -177,11 +177,10 @@ async def process_city(message: Message, state: FSMContext) -> None:
     а по-честному.
     Сохраняет название города на английском, его id и географические координаты
     """
-    await message.delete()
     watches:Message = await message.answer_sticker(sticker_id)
     city_text:str = message.text
     translator:Translator = Translator()
-    tr_city_text: str = await translator.translate(text=city_text)
+    tr_city_text: Any = await translator.translate(text=city_text)
     if tr_city_text.src == 'bg' and message.from_user.language_code == 'ru':
         translator:Translator = Translator()
         tr_city_text:str = await translator.translate(text=city_text, src='ru')
@@ -203,7 +202,6 @@ async def process_city(message: Message, state: FSMContext) -> None:
                     city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
                 except IndexError:
                     city_not_found: bool = True
-    print(city_id)
     location: Any = None
     while True:
         # Не всегда сервера геокодинга с первого раза отвечают
@@ -218,8 +216,9 @@ async def process_city(message: Message, state: FSMContext) -> None:
         except Exception:
             pass
     await watches.delete()
+    await message.delete()
     if city_not_found:
-        await message.reply('К сожалению, не могу найти такого города, попробуйте еще раз...')
+        await message.answer('К сожалению, не могу найти такого города, попробуйте еще раз...')
     else:
         await state.update_data(city_text=city_text)
         await state.update_data(city_id=city_id)
@@ -264,6 +263,8 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
                 await state.set_state(HotelBotForm.date_to)
             except ValueError:
                 await query.answer('Неверная дата, попробуйте еще раз')
+            finally:
+                await query.delete()
         else:
             try:
                 date_to = datetime.datetime.strptime(query.text, '%Y-%m-%d')
@@ -273,26 +274,27 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
                 await finish(query, date_to, date_from)
             except ValueError:
                 await query.answer('Неверная дата, попробуйте еще раз')
-        return
-    locale: str = data['locale']
-    min_date = data.get('date_from', datetime.date.today())
-    calendar_locale: str = 'ru' if locale == 'ru' else 'en'
-    result, key, step = DetailedTelegramCalendar(locale=calendar_locale,
-                                                 min_date=min_date).process(query.data)
-    if not result and key:
-        await query.message.edit_reply_markup(reply_markup=calendar_keyboard(key))
-    elif result:
-        if first:
-            await state.update_data(date_from=result)
-            calendar, step = DetailedTelegramCalendar(locale=calendar_locale,
-                                                      min_date=min_date).build()
-            await query.message.edit_text('Выберите дату выезда')
-            await query.message.edit_reply_markup(reply_markup=calendar_keyboard(calendar))
-            await state.set_state(HotelBotForm.date_to)
-        else:
-            await query.message.delete()
-            date_from = data['date_from']
-            await finish(query.message, result, date_from)
+            await query.delete()
+    else:
+        locale: str = data['locale']
+        min_date = data.get('date_from', datetime.date.today())
+        calendar_locale: str = 'ru' if locale == 'ru' else 'en'
+        result, key, step = DetailedTelegramCalendar(locale=calendar_locale,
+                                                     min_date=min_date).process(query.data)
+        if not result and key:
+            await query.message.edit_reply_markup(reply_markup=calendar_keyboard(key))
+        elif result:
+            if first:
+                await state.update_data(date_from=result)
+                calendar, step = DetailedTelegramCalendar(locale=calendar_locale,
+                                                          min_date=min_date).build()
+                await query.message.edit_text('Выберите дату выезда')
+                await query.message.edit_reply_markup(reply_markup=calendar_keyboard(calendar))
+                await state.set_state(HotelBotForm.date_to)
+            else:
+                await query.message.delete()
+                date_from = data['date_from']
+                await finish(query.message, result, date_from)
 
 
 async def process_find(message: Message, state: FSMContext) -> None:
@@ -309,7 +311,6 @@ async def process_find(message: Message, state: FSMContext) -> None:
                      cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2)
         return 12742 * asin(sqrt(a))
 
-    await message.delete()
     data: dict = await state.get_data()
     watches: Message = await message.answer_sticker(sticker_id, reply_markup=ReplyKeyboardRemove())
     # Способ сортировки
@@ -391,7 +392,15 @@ async def process_find(message: Message, state: FSMContext) -> None:
 
     await state.update_data(hotels_list=hotels_list, hotels_shown=[])
     await state.set_state(HotelBotForm.show_result)
+    await message.delete()
     await watches.delete()
+    timestamp = datetime.datetime.now().timestamp()
+    connection: AsyncIOMotorClient = AsyncIOMotorClient(config.db.host, config.db.port)
+    db = connection[config.db.database]
+    db.insert({'user_id':message.from_user.id,
+               'timestamp':timestamp,
+               'hotels':[]})
+    await state.update_data('db':db, )
     temp: Message = await message.answer('Готово')
     await command_show(temp, state)
 
