@@ -400,7 +400,7 @@ async def process_find(message: Message, state: FSMContext) -> None:
     db.insert({'user_id':message.from_user.id,
                'timestamp':timestamp,
                'hotels':[]})
-    await state.update_data('db':db, )
+    await state.update_data('db':db, 'timestamp':timestamp)
     temp: Message = await message.answer('Готово')
     await command_show(temp, state)
 
