@@ -27,7 +27,7 @@ from tgbot.keyboards.inline import calendar_keyboard, hotel_keyboard
 from tgbot.keyboards.reply import reply_keyboard, btn_config, search_keyboard, btn_show_more
 from tgbot.misc.aiogoogletrans2.client import Translator
 from tgbot.misc.api_locales import hotels_api_locales
-from tgbot.misc.templates import hotel_card
+from tgbot.misc.templates import hotel_card, query_card, history_card
 from tgbot.models.fsm import HotelBotForm
 from tgbot.config import config
 
@@ -68,7 +68,13 @@ async def command_history(message: Message, state: FSMContext) -> None:
     """
     Хендлер показа истории запросов
     """
-    await message.answer('Здесь будет история поисков')
+    await message.answer('История поиска:')
+    connection: AsyncIOMotorClient = AsyncIOMotorClient(config.db.host, int(config.db.port))
+    db = connection[config.db.database].collection
+    queries = db.find({'user_id': message.from_user.id})
+    async for query in queries:
+        await message.answer(Template(history_card).render(query,
+                                                           ts=datetime.datetime.fromtimestamp))
     await message.delete()
 
 
@@ -119,7 +125,7 @@ async def command_show(message: Message, state: FSMContext) -> None:
         reply_kb: ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[[btn_show_more],
                                                             main_keyboard],
                                                             resize_keyboard=True)
-        await message.answer('Результаты поиска:', reply_markup=reply_kb)
+        await message.answer(Template(query_card).render(data), reply_markup=reply_kb)
     counter: int = min(int(config.misc.hotels_per_page), hotels_left)
     for _ in range(counter):
         hotel: dict = hotels_list[len(hotels_shown)]
@@ -130,6 +136,11 @@ async def command_show(message: Message, state: FSMContext) -> None:
             await message.answer(text=hotel['caption'],
                                  reply_markup=hotel_keyboard(hotel, len(hotels_shown)))
         hotels_shown.append(hotel['name'])
+        connection: AsyncIOMotorClient = AsyncIOMotorClient(config.db.host, int(config.db.port))
+        db = connection[config.db.database].collection
+        timestamp = data['timestamp']
+        db.update_one({'user_id': message.from_user.id, 'timestamp': timestamp},
+                  {'$push': {'hotels': hotel['name']}})
     if len(hotels_list) == len(hotels_shown):
         reply_kb:ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[data.get('main_keyboard')],
                                                            resize_keyboard=True)
@@ -182,11 +193,11 @@ async def process_city(message: Message, state: FSMContext) -> None:
     translator:Translator = Translator()
     tr_city_text: Any = await translator.translate(text=city_text)
     if tr_city_text.src == 'bg' and message.from_user.language_code == 'ru':
+        # Глюки гугла
         translator:Translator = Translator()
-        tr_city_text:str = await translator.translate(text=city_text, src='ru')
-    city_text:str = tr_city_text.text
+        tr_city_text: Any = await translator.translate(text=city_text, src='ru')
     url:str = "https://hotels4.p.rapidapi.com/locations/v2/search"
-    querystring:dict = {"query": city_text, "locale": 'en_US', "currency": "USD"}
+    querystring:dict = {"query": tr_city_text.text, "locale": 'en_US', "currency": "USD"}
     headers: dict = {'x-rapidapi-host': "hotels4.p.rapidapi.com",'x-rapidapi-key': APIKEY}
     city_not_found: bool = False
     async with ClientSession() as session:
@@ -198,7 +209,9 @@ async def process_city(message: Message, state: FSMContext) -> None:
                     temp_cities: dict = {}
                     for entity in resp_json['suggestions'][0]['entities']:
                         # Угадай, блядь, что задумали пидарасы из hotels.com
-                        temp_cities[entity['destinationId']] = SequenceMatcher(None,city_text.lower(),entity['name'].lower()).ratio()
+                        temp_cities[entity['destinationId']] = SequenceMatcher(None,
+                                                                               tr_city_text.text.lower(),
+                                                                               entity['name'].lower()).ratio()
                     city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
                 except IndexError:
                     city_not_found: bool = True
@@ -208,7 +221,7 @@ async def process_city(message: Message, state: FSMContext) -> None:
         try:
             async with Nominatim(user_agent=config.misc.app_name,
                                  adapter_factory=AioHTTPAdapter, ) as geolocator:
-                location: Any = await geolocator.geocode({'city': city_text})
+                location: Any = await geolocator.geocode({'city': tr_city_text.text})
             if location is not None:
                 latitude: float = location.latitude
                 longitude: float = location.longitude
@@ -254,6 +267,7 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
     first: bool = await state.get_state() == 'HotelBotForm:date_from'
     data: dict = await state.get_data()
     if isinstance(query, Message):
+        # Если ручной ввод
         if first:
             try:
                 date_from = datetime.datetime.strptime(query.text, '%Y-%m-%d')
@@ -327,6 +341,7 @@ async def process_find(message: Message, state: FSMContext) -> None:
     await state.update_data(order=request)
     city_id: str = data['city_id']
     max_hotels: str = config.misc.max_hotels
+    page_size: str = str(min(int(max_hotels), 25))
     check_in = datetime.datetime.strftime(data['date_from'], '%Y-%m-%d')
     check_out = datetime.datetime.strftime(data['date_to'], '%Y-%m-%d')
     adults1: str = '1'
@@ -335,16 +350,19 @@ async def process_find(message: Message, state: FSMContext) -> None:
     currency: str = config.misc.currency
     if request == 'highprice':
         sort_order: str = 'PRICE_HIGHEST_FIRST'
+        sort_comment: str = 'по убыванию цены'
     elif request == 'bestdeal':
         sort_order: str = 'DISTANCE_FROM_LANDMARK'
+        sort_comment: str = 'оптимум по цене и расстоянию от центра'
     else:
         sort_order: str = 'PRICE'
+        sort_comment: str = 'по возрастанию цены'
     locale: str = hotels_api_locales.get(data['locale'], 'en_US')
     locale: str = 'en_US'
     url: str = "https://hotels4.p.rapidapi.com/properties/list"
     headers: dict = {'x-rapidapi-host': "hotels4.p.rapidapi.com", 'x-rapidapi-key': APIKEY}
     querystring: dict = {"destinationId": city_id, "pageNumber": "1",
-                         "pageSize": max_hotels, "checkIn": check_in,"checkOut": check_out,
+                         "pageSize": page_size, "checkIn": check_in,"checkOut": check_out,
                          "adults1": adults1, "sortOrder": sort_order, "locale": locale,
                          "currency": currency}
     if price_max != 0:
@@ -390,17 +408,25 @@ async def process_find(message: Message, state: FSMContext) -> None:
                             'name': hotel['name'], 'id': hotel['id'], 'url': url,
                             'longitude': lon1, 'latitude': lat1, 'address': context['address']})
 
-    await state.update_data(hotels_list=hotels_list, hotels_shown=[])
+    await state.update_data(hotels_list=hotels_list, hotels_shown=[], sort_comment=sort_comment,
+                            lowprice=price_min, highprice=price_max, cur_sym=config.misc.currency_sym)
     await state.set_state(HotelBotForm.show_result)
     await message.delete()
     await watches.delete()
     timestamp = datetime.datetime.now().timestamp()
-    connection: AsyncIOMotorClient = AsyncIOMotorClient(config.db.host, config.db.port)
-    db = connection[config.db.database]
-    db.insert({'user_id':message.from_user.id,
+    connection: AsyncIOMotorClient = AsyncIOMotorClient(config.db.host, int(config.db.port))
+    db = connection[config.db.database].collection
+    db.insert_one({'user_id':message.from_user.id,
                'timestamp':timestamp,
+               'city_text':data['city_text'],
+               'date_from':datetime.date.strftime(data['date_from'], '%Y-%m-%d'),
+               'date_to':datetime.date.strftime(data['date_to'], '%Y-%m-%d'),
+               'sort_comment':sort_comment,
+               'lowprice':price_min,
+               'high_price':price_max,
+               'cur_sym':config.misc.currency_sym,
                'hotels':[]})
-    await state.update_data('db':db, 'timestamp':timestamp)
+    await state.update_data(db=db, timestamp=timestamp)
     temp: Message = await message.answer('Готово')
     await command_show(temp, state)
 
