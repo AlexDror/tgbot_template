@@ -180,7 +180,7 @@ async def process_config(message: Message, state: FSMContext) -> None:
             config_messages.append(await message.answer(str(exept)))
 
 
-async def process_city(message: Message, state: FSMContext) -> None:
+async def process_city(something: [Message, CallbackQuery], state: FSMContext) -> None:
     """
     Процессор поиска города в базе Hotels.com
     Переводит название города с любого языка на английский,
@@ -188,60 +188,81 @@ async def process_city(message: Message, state: FSMContext) -> None:
     а по-честному.
     Сохраняет название города на английском, его id и географические координаты
     """
-    watches:Message = await message.answer_sticker(sticker_id)
-    city_text:str = message.text
-    translator:Translator = Translator()
-    tr_city_text: Any = await translator.translate(text=city_text)
-    if tr_city_text.src == 'bg' and message.from_user.language_code == 'ru':
-        # Глюки гугла
-        translator:Translator = Translator()
-        tr_city_text: Any = await translator.translate(text=city_text, src='ru')
-    url:str = "https://hotels4.p.rapidapi.com/locations/v2/search"
-    querystring:dict = {"query": tr_city_text.text, "locale": 'en_US', "currency": "USD"}
-    headers: dict = {'x-rapidapi-host': "hotels4.p.rapidapi.com",'x-rapidapi-key': APIKEY}
-    city_not_found: bool = False
-    async with ClientSession() as session:
-        async with session.get(url, headers=headers, params=querystring) as resp:
-            if resp.status == 200:
-                resp_text: str = await resp.text()
-                resp_json: dict = json.loads(resp_text)
+    data = await state.get_data()
+    if isinstance(something, Message):
+        message: Message = something
+        watches: Message = await message.answer_sticker(sticker_id)
+        city_text: str = message.text
+        translator: Translator = Translator()
+        tr_city_text: Any = await translator.translate(text=city_text)
+        if tr_city_text.src == 'bg' and message.from_user.language_code == 'ru':
+            # Глюки гугла
+            translator:Translator = Translator()
+            tr_city_text: Any = await translator.translate(text=city_text, src='ru')
+        url:str = "https://hotels4.p.rapidapi.com/locations/v2/search"
+        querystring:dict = {"query": tr_city_text.text, "locale": 'en_US', "currency": "USD"}
+        headers: dict = {'x-rapidapi-host': "hotels4.p.rapidapi.com",'x-rapidapi-key': APIKEY}
+        city_not_found: bool = False
+        entities: list = []
+        async with ClientSession() as session:
+            async with session.get(url, headers=headers, params=querystring) as resp:
+                if resp.status == 200:
+                    resp_text: str = await resp.text()
+                    resp_json: dict = json.loads(resp_text)
+                    try:
+                        entities = resp_json['suggestions'][0]['entities']
+                    except IndexError:
+                        city_not_found: bool = True
+        if city_not_found:
+            await message.answer('К сожалению, не могу найти такого города, попробуйте еще раз...')
+        else:
+            location: Any = None
+            await watches.delete()
+            await message.delete()
+            await state.update_data(city_text=city_text, translated_city=tr_city_text.text)
+
+            if len(entities) > 1:
+                temp_cities: dict = {}
+                for entity in resp_json['suggestions'][0]['entities']:
+                    # Угадай, блядь, что задумали пидарасы из hotels.com
+                    temp_cities[entity['destinationId']] = SequenceMatcher(None,
+                                                                           tr_city_text.text.lower(),
+                                                                           entity['name'].lower()).ratio()
+                    exact_matches = [key for key, value in temp_cities.items() if value == 1]
+                    if len(exact_matches) > 1:
+                        await message.answer('Уточните название города, пожалуйста:')
+                        #
+                    else:
+                        city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
+            else:
+                city_id = entities[0]['destinationId']
+            while True:
+                # Не всегда сервера геокодинга с первого раза отвечают
                 try:
-                    temp_cities: dict = {}
-                    for entity in resp_json['suggestions'][0]['entities']:
-                        # Угадай, блядь, что задумали пидарасы из hotels.com
-                        temp_cities[entity['destinationId']] = SequenceMatcher(None,
-                                                                               tr_city_text.text.lower(),
-                                                                               entity['name'].lower()).ratio()
-                    city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
-                except IndexError:
-                    city_not_found: bool = True
-    location: Any = None
-    while True:
-        # Не всегда сервера геокодинга с первого раза отвечают
-        try:
-            async with Nominatim(user_agent=config.misc.app_name,
-                                 adapter_factory=AioHTTPAdapter, ) as geolocator:
-                location: Any = await geolocator.geocode({'city': tr_city_text.text})
-            if location is not None:
-                latitude: float = location.latitude
-                longitude: float = location.longitude
-                break
-        except Exception:
-            pass
-    await watches.delete()
-    await message.delete()
-    if city_not_found:
-        await message.answer('К сожалению, не могу найти такого города, попробуйте еще раз...')
+                    async with Nominatim(user_agent=config.misc.app_name,
+                                         adapter_factory=AioHTTPAdapter, ) as geolocator:
+                        location: Any = await geolocator.geocode({'city': data['translated_city']})
+                    if location is not None:
+                        latitude: float = location.latitude
+                        longitude: float = location.longitude
+                        break
+                except Exception:
+                    pass
+
+
+            await state.update_data(city_id=city_id)
+            await state.update_data(city_lat=latitude)
+            await state.update_data(city_lon=longitude)
+            await state.set_state(HotelBotForm.date_from)
+            calendar_locale = 'ru' if message.from_user.language_code == 'ru' else 'en'
+            min_date = datetime.date.today()
+            calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
+            await message.answer(text='Выберите дату заезда', reply_markup=calendar_keyboard(calendar))
     else:
-        await state.update_data(city_text=city_text)
-        await state.update_data(city_id=city_id)
-        await state.update_data(city_lat=latitude)
-        await state.update_data(city_lon=longitude)
-        await state.set_state(HotelBotForm.date_from)
-        calendar_locale = 'ru' if message.from_user.language_code == 'ru' else 'en'
-        min_date = datetime.date.today()
-        calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
-        await message.answer(text='Выберите дату заезда', reply_markup=calendar_keyboard(calendar))
+        message:Message = something.message
+
+
+
 
 
 async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -> None:

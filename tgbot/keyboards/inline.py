@@ -2,6 +2,8 @@
 Инлайн-клавиатуры и все, что с ними связано
 """
 from json import loads
+from lxml import html
+from lxml.html.clean import clean_html
 
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -19,6 +21,15 @@ def calendar_keyboard(src: str) -> InlineKeyboardMarkup:
             subarray.append(InlineKeyboardButton(text=item['text'], callback_data=item['callback_data']))
         result_list.append(subarray)
     return InlineKeyboardMarkup(inline_keyboard=result_list)
+
+
+def city_keyboard(entities: list) -> InlineKeyboardMarkup:
+    result: list = []
+    for entity in entities:
+        text = clean_html(html.fromstring(entity['caption'])).strip()
+        callback = text + '#' + entity(['destinationId'])
+        result.append([InlineKeyboardButton(text=text, callback_data=callback)])
+    return InlineKeyboardMarkup(inline_keyboard=result)
 
 
 def hotel_keyboard(data: dict, number: int) -> InlineKeyboardMarkup:
