@@ -84,14 +84,14 @@ async def command_config(message: Message, state: FSMContext) -> None:
     Сохраняет значение состояния, откуда был вызван и список сообщений для последующего удаления
     """
     config_messages: list = [message]
-    config_messages.append(await message.answer('Здесь можно настроить дополнительные'+
+    config_messages.append(await message.answer('Здесь можно настроить дополнительные'
                                                 'параметры бота'))
     config_messages.append(await message.answer('Доступны следующие параметры:'))
     variables: list = config.misc.__dict__.keys()
     for var in variables:
         config_messages.append(await message.answer(var + ' = ' + getattr(config.misc, var)))
-    config_messages.append(await message.answer('Введите имя параметра и его новое значение '+
-                                                'через символ "=" без пробелов, '+
+    config_messages.append(await message.answer('Введите имя параметра и его новое значение '
+                                                'через символ "=" без пробелов, '
                                                 'окончание ввода - 0'))
     current_state: str = await state.get_state()
     await state.update_data(previous_state=current_state, config_messages=config_messages)
@@ -358,7 +358,6 @@ async def process_find(message: Message, state: FSMContext) -> None:
         sort_order: str = 'PRICE'
         sort_comment: str = 'по возрастанию цены'
     locale: str = hotels_api_locales.get(data['locale'], 'en_US')
-    locale: str = 'en_US'
     url: str = "https://hotels4.p.rapidapi.com/properties/list"
     headers: dict = {'x-rapidapi-host': "hotels4.p.rapidapi.com", 'x-rapidapi-key': APIKEY}
     querystring: dict = {"destinationId": city_id, "pageNumber": "1",
