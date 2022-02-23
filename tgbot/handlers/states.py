@@ -76,7 +76,8 @@ async def command_history(message: Message, state: FSMContext) -> None:
     queries = db.find({'user_id': message.from_user.id})
     async for query in queries:
         await message.answer(Template(history_card).render(query,
-                                                           ts=datetime.datetime.fromtimestamp))
+                                                           ts=datetime.datetime.fromtimestamp),
+                             disable_web_page_preview=True)
     connection.close()
     await message.delete()
 
