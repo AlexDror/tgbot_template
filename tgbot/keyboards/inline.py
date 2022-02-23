@@ -26,8 +26,8 @@ def calendar_keyboard(src: str) -> InlineKeyboardMarkup:
 def city_keyboard(entities: list) -> InlineKeyboardMarkup:
     result: list = []
     for entity in entities:
-        text = clean_html(html.fromstring(entity['caption'])).strip()
-        callback = text + '#' + entity(['destinationId'])
+        text = str(html.fromstring(entity['caption']).text_content()).strip()
+        callback = entity['destinationId']
         result.append([InlineKeyboardButton(text=text, callback_data=callback)])
     return InlineKeyboardMarkup(inline_keyboard=result)
 

@@ -11,6 +11,7 @@ from typing import Any
 from geopy import Nominatim
 from geopy.adapters import AioHTTPAdapter
 from jinja2 import Template
+from lxml import html
 
 from aiogram import Router, F
 from aiogram.dispatcher.filters import Command
@@ -18,12 +19,13 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, \
                           CallbackQuery, InputMedia
 from aiohttp.client import ClientSession
+
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from telegram_bot_calendar import DetailedTelegramCalendar
 from telegram_bot_pagination import InlineKeyboardPaginator, InlineKeyboardButton
 
-from tgbot.keyboards.inline import calendar_keyboard, hotel_keyboard
+from tgbot.keyboards.inline import calendar_keyboard, hotel_keyboard, city_keyboard
 from tgbot.keyboards.reply import reply_keyboard, btn_config, search_keyboard, btn_show_more
 from tgbot.misc.aiogoogletrans2.client import Translator
 from tgbot.misc.api_locales import hotels_api_locales
@@ -75,6 +77,7 @@ async def command_history(message: Message, state: FSMContext) -> None:
     async for query in queries:
         await message.answer(Template(history_card).render(query,
                                                            ts=datetime.datetime.fromtimestamp))
+    connection.close()
     await message.delete()
 
 
@@ -140,7 +143,8 @@ async def command_show(message: Message, state: FSMContext) -> None:
         db = connection[config.db.database].collection
         timestamp = data['timestamp']
         db.update_one({'user_id': message.from_user.id, 'timestamp': timestamp},
-                  {'$push': {'hotels': hotel['name']}})
+                  {'$push': {'hotels': (hotel['name'], hotel['url'])}})
+        connection.close()
     if len(hotels_list) == len(hotels_shown):
         reply_kb:ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[data.get('main_keyboard')],
                                                            resize_keyboard=True)
@@ -216,53 +220,66 @@ async def process_city(something: [Message, CallbackQuery], state: FSMContext) -
         if city_not_found:
             await message.answer('К сожалению, не могу найти такого города, попробуйте еще раз...')
         else:
-            location: Any = None
             await watches.delete()
             await message.delete()
-            await state.update_data(city_text=city_text, translated_city=tr_city_text.text)
+            await state.update_data(city_text=city_text, translated_city=tr_city_text.text, entities=entities)
 
             if len(entities) > 1:
-                temp_cities: dict = {}
-                for entity in resp_json['suggestions'][0]['entities']:
-                    # Угадай, блядь, что задумали пидарасы из hotels.com
-                    temp_cities[entity['destinationId']] = SequenceMatcher(None,
-                                                                           tr_city_text.text.lower(),
-                                                                           entity['name'].lower()).ratio()
-                    exact_matches = [key for key, value in temp_cities.items() if value == 1]
-                    if len(exact_matches) > 1:
-                        await message.answer('Уточните название города, пожалуйста:')
-                        #
-                    else:
-                        city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
+                # # Если городов больше одного
+                # temp_cities: dict = {}
+                # for entity in resp_json['suggestions'][0]['entities']:
+                #     # Угадай, блядь, что задумали пидарасы из hotels.com
+                #     # Проверяем точное совпадение названий
+                #     temp_cities[entity['destinationId']] = SequenceMatcher(None,
+                #                                                            tr_city_text.text.lower(),
+                #                                                            entity['name'].lower()).ratio()
+                # exact_matches = [key for key, value in temp_cities.items() if value == 1]
+                # if len(exact_matches) > 1:
+                # # Если точных названий много, уточняем у пользователя
+                await message.answer('Уточните название города, пожалуйста:',
+                                    reply_markup=city_keyboard(entities))
+                return
+                # else:
+                #     # Если одно точное совпадение
+                #     city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
             else:
-                city_id = entities[0]['destinationId']
-            while True:
-                # Не всегда сервера геокодинга с первого раза отвечают
-                try:
-                    async with Nominatim(user_agent=config.misc.app_name,
-                                         adapter_factory=AioHTTPAdapter, ) as geolocator:
-                        location: Any = await geolocator.geocode({'city': data['translated_city']})
+                # Если один город всего
+                city_id: str = entities[0]['destinationId']
+                longitude: float = entities[0]['longitude']
+                latitude: float = entities[0]['latitude']
+    else:
+        # Прилетел коллбэк
+        city_id: str = something.data
+        message: Message = something.message
+        await message.delete()
+        entity: dict = [x for x in data['entities'] if x['destinationId'] == city_id][0]
+        longitude: float = entity['longitude']
+        latitude: float = entity['latitude']
+        await state.update_data(translated_city = str(html.fromstring(entity['caption']).text_content()).strip())
+    # Общие действия
+    if config.misc.use_geocode != '0':
+        location: Any = None
+        data = await state.update_data()
+        while True:
+        # Не всегда сервера геокодинга с первого раза отвечают
+            try:
+                async with Nominatim(user_agent=config.misc.app_name,
+                                    adapter_factory=AioHTTPAdapter, ) as geolocator:
+                    location: Any = await geolocator.geocode({'city': data['translated_city']})
                     if location is not None:
                         latitude: float = location.latitude
                         longitude: float = location.longitude
                         break
-                except Exception:
-                    pass
-
-
-            await state.update_data(city_id=city_id)
-            await state.update_data(city_lat=latitude)
-            await state.update_data(city_lon=longitude)
-            await state.set_state(HotelBotForm.date_from)
-            calendar_locale = 'ru' if message.from_user.language_code == 'ru' else 'en'
-            min_date = datetime.date.today()
-            calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
-            await message.answer(text='Выберите дату заезда', reply_markup=calendar_keyboard(calendar))
-    else:
-        message:Message = something.message
-
-
-
+            except Exception:
+                pass
+    await state.update_data(city_id=city_id)
+    await state.update_data(city_lat=latitude)
+    await state.update_data(city_lon=longitude)
+    await state.set_state(HotelBotForm.date_from)
+    calendar_locale = 'ru' if message.from_user.language_code == 'ru' else 'en'
+    min_date = datetime.date.today()
+    calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
+    await message.answer(text='Выберите дату заезда', reply_markup=calendar_keyboard(calendar))
 
 
 async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -> None:
@@ -446,6 +463,7 @@ async def process_find(message: Message, state: FSMContext) -> None:
                'high_price':price_max,
                'cur_sym':config.misc.currency_sym,
                'hotels':[]})
+    connection.close()
     await state.update_data(db=db, timestamp=timestamp)
     temp: Message = await message.answer('Готово')
     await command_show(temp, state)
@@ -576,6 +594,7 @@ def register_fsm(dp: Router) -> None:
     """
     Регистрация всех хендлеров
     """
+    dp.callback_query.register(process_city, HotelBotForm.init)
     dp.callback_query.register(process_calendar, DetailedTelegramCalendar.func())
     dp.callback_query.register(hotel_callback, HotelBotForm.show_result)
     dp.callback_query.register(photo_page_callback, HotelBotForm.show_photo)

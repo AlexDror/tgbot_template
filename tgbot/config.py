@@ -40,6 +40,7 @@ class Miscellaneous:
     hotels_per_page: str = None
     pictures_per_page: str = None
     show_venue: str = None
+    use_geocode: str = None
 
 
 @dataclass
@@ -81,6 +82,7 @@ def load_config(path: str = None):
             hotels_per_page=env.str('HOTELS_PER_PAGE'),
             app_name=env.str('APP_NAME'),
             pictures_per_page = env.str('PICTURES_PER_PAGE'),
+            use_geocode=env.str('USE_GEOCODE'),
             show_venue = env.str('SHOW_VENUE')
 
         )
