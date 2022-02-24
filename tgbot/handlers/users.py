@@ -19,6 +19,7 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove, ReplyKeyboardMarkup, \
                           CallbackQuery, InputMedia
 from aiohttp.client import ClientSession
+from aiogram.utils.i18n import gettext as _
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -57,10 +58,10 @@ async def command_start(message: Message, state: FSMContext) -> None:
     if message.from_user.id in ADMINS:
         main_keyboard.append(btn_config)
     await state.update_data(main_keyboard=main_keyboard)
-    await message.answer('Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n'
+    await message.answer(_('Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n'
                          'Я попробую найти для Вас комфортный отель по заданным Вами условиям,'
                          'и я уверен, у нас все получится! Если Вы готовы, введите название '
-                         'города, в котором Вы планируете остановиться',
+                         'города, в котором Вы планируете остановиться'),
                          reply_markup=ReplyKeyboardMarkup(keyboard=[main_keyboard],
                                                           resize_keyboard=True,),)
     await message.delete()
@@ -70,7 +71,7 @@ async def command_history(message: Message, state: FSMContext) -> None:
     """
     Хендлер показа истории запросов
     """
-    await message.answer('История поиска:')
+    await message.answer(_('История поиска:'))
     connection: AsyncIOMotorClient = AsyncIOMotorClient(config.db.host, int(config.db.port))
     db = connection[config.db.database].collection
     queries = db.find({'user_id': message.from_user.id})
@@ -82,26 +83,6 @@ async def command_history(message: Message, state: FSMContext) -> None:
     await message.delete()
 
 
-async def command_config(message: Message, state: FSMContext) -> None:
-    """
-    Хендлер админского меню конфигурирования параметров бота
-    Сохраняет значение состояния, откуда был вызван и список сообщений для последующего удаления
-    """
-    config_messages: list = [message]
-    config_messages.append(await message.answer('Здесь можно настроить дополнительные'
-                                                'параметры бота'))
-    config_messages.append(await message.answer('Доступны следующие параметры:'))
-    variables: list = config.misc.__dict__.keys()
-    for var in variables:
-        config_messages.append(await message.answer(var + ' = ' + getattr(config.misc, var)))
-    config_messages.append(await message.answer('Введите имя параметра и его новое значение '
-                                                'через символ "=" без пробелов, '
-                                                'окончание ввода - 0'))
-    current_state: str = await state.get_state()
-    await state.update_data(previous_state=current_state, config_messages=config_messages)
-    await state.set_state(HotelBotForm.config)
-
-
 async def command_setprices(message: Message, state: FSMContext) -> None:
     """
     Хендлер команды установки границ цен отелей
@@ -109,7 +90,7 @@ async def command_setprices(message: Message, state: FSMContext) -> None:
     """
     config_messages: list = [message]
     await state.set_state(HotelBotForm.set_price1)
-    config_messages.append(await message.answer('Введите минимальную цену: '))
+    config_messages.append(await message.answer(_('Введите минимальную цену: ')))
     await state.update_data(config_messages=config_messages)
 
 
@@ -157,32 +138,8 @@ async def command_help(message: Message, state: FSMContext) -> None:
     """
     Хендлер команды help
     """
-    await message.answer('Бог поможет... А я просто бот.')
+    await message.answer(_('У Вас все получится...'))
     await message.delete()
-
-
-async def process_config(message: Message, state: FSMContext) -> None:
-    """
-    Хендлер команды config.
-    Изменяет параметры конфигурирования, запоминает сообщения
-    для последующего удаления, по окончании работы - удаляет.
-    """
-    data: dict = await state.get_data()
-    config_messages: list = data['config_messages']
-    config_messages.append(message)
-    if message.text == '0':
-        for mes in config_messages:
-            await mes.delete()
-        await state.update_data(config_messages=[])
-        await state.set_state(data['previous_state'])
-    else:
-        try:
-            config_messages.append(message)
-            values: list = message.text.split('=')
-            setattr(config.misc, values[0], values[1])
-            config_messages.append(await message.answer('Ok'))
-        except Exception as exept:
-            config_messages.append(await message.answer(str(exept)))
 
 
 async def process_city(something: [Message, CallbackQuery], state: FSMContext) -> None:
@@ -219,7 +176,7 @@ async def process_city(something: [Message, CallbackQuery], state: FSMContext) -
                     except IndexError:
                         city_not_found: bool = True
         if city_not_found:
-            await message.answer('К сожалению, не могу найти такого города, попробуйте еще раз...')
+            await message.answer(_('К сожалению, не могу найти такого города, попробуйте еще раз...'))
         else:
             await watches.delete()
             await message.delete()
@@ -227,22 +184,23 @@ async def process_city(something: [Message, CallbackQuery], state: FSMContext) -
 
             if len(entities) > 1:
                 # # Если городов больше одного
-                # temp_cities: dict = {}
-                # for entity in resp_json['suggestions'][0]['entities']:
-                #     # Угадай, блядь, что задумали пидарасы из hotels.com
-                #     # Проверяем точное совпадение названий
-                #     temp_cities[entity['destinationId']] = SequenceMatcher(None,
-                #                                                            tr_city_text.text.lower(),
-                #                                                            entity['name'].lower()).ratio()
-                # exact_matches = [key for key, value in temp_cities.items() if value == 1]
-                # if len(exact_matches) > 1:
-                # # Если точных названий много, уточняем у пользователя
-                await message.answer('Уточните название города, пожалуйста:',
-                                    reply_markup=city_keyboard(entities))
-                return
-                # else:
-                #     # Если одно точное совпадение
-                #     city_id = sorted(temp_cities.items(), key=lambda x: x[1])[-1][0]
+                if config.misc.search_exact_matches == '1':
+                    temp_cities: dict = {}
+                    for entity in resp_json['suggestions'][0]['entities']:
+                        # Угадай, блядь, что задумали пидарасы из hotels.com
+                        # Проверяем точное совпадение названий
+                        temp_cities[entity['destinationId']] = SequenceMatcher(None,
+                                                                               tr_city_text.text.lower(),
+                                                                               entity['name'].lower()).ratio()
+                    city_id = sorted(temp_cities.items(), key=lambda x: x[1], reverse=True)[0][0]
+                    entity: dict = [x for x in entities if x['destinationId'] == city_id][0]
+                    longitude: float = entity['longitude']
+                    latitude: float = entity['latitude']
+                else:
+                    # # Если точных названий много, уточняем у пользователя
+                    await message.answer(_('Уточните название города, пожалуйста:'),
+                                        reply_markup=city_keyboard(entities))
+                    return
             else:
                 # Если один город всего
                 city_id: str = entities[0]['destinationId']
@@ -280,7 +238,7 @@ async def process_city(something: [Message, CallbackQuery], state: FSMContext) -
     calendar_locale = 'ru' if message.from_user.language_code == 'ru' else 'en'
     min_date = datetime.date.today()
     calendar, step = DetailedTelegramCalendar(locale=calendar_locale, min_date=min_date).build()
-    await message.answer(text='Выберите дату заезда', reply_markup=calendar_keyboard(calendar))
+    await message.answer(text=_('Выберите дату заезда'), reply_markup=calendar_keyboard(calendar))
 
 
 async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -> None:
@@ -299,7 +257,7 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
         main_keyboard: list = data['main_keyboard']
         new_keyboard: list = search_keyboard[:]
         new_keyboard.append(main_keyboard)
-        await message.answer('Выберите, как отсортировать для Вас отели',
+        await message.answer(_('Выберите, как отсортировать для Вас отели'),
                              reply_markup=ReplyKeyboardMarkup(keyboard=new_keyboard,
                                                               resize_keyboard=True, ))
 
@@ -315,7 +273,7 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
                 await state.update_data(date_from=date_from)
                 await state.set_state(HotelBotForm.date_to)
             except ValueError:
-                await query.answer('Неверная дата, попробуйте еще раз')
+                await query.answer(_('Неверная дата, попробуйте еще раз'))
             finally:
                 await query.delete()
         else:
@@ -326,7 +284,7 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
                     raise ValueError
                 await finish(query, date_to, date_from)
             except ValueError:
-                await query.answer('Неверная дата, попробуйте еще раз')
+                await query.answer(_('Неверная дата, попробуйте еще раз'))
             await query.delete()
     else:
         locale: str = data['locale']
@@ -341,7 +299,7 @@ async def process_calendar(query: [CallbackQuery, Message], state: FSMContext) -
                 await state.update_data(date_from=result)
                 calendar, step = DetailedTelegramCalendar(locale=calendar_locale,
                                                           min_date=min_date).build()
-                await query.message.edit_text('Выберите дату выезда')
+                await query.message.edit_text(_('Выберите дату выезда'))
                 await query.message.edit_reply_markup(reply_markup=calendar_keyboard(calendar))
                 await state.set_state(HotelBotForm.date_to)
             else:
@@ -389,13 +347,13 @@ async def process_find(message: Message, state: FSMContext) -> None:
     currency: str = config.misc.currency
     if request == 'highprice':
         sort_order: str = 'PRICE_HIGHEST_FIRST'
-        sort_comment: str = 'по убыванию цены'
+        sort_comment: str = _('по убыванию цены')
     elif request == 'bestdeal':
         sort_order: str = 'DISTANCE_FROM_LANDMARK'
-        sort_comment: str = 'оптимум по цене и расстоянию от центра'
+        sort_comment: str = _('оптимум по цене и расстоянию от центра')
     else:
         sort_order: str = 'PRICE'
-        sort_comment: str = 'по возрастанию цены'
+        sort_comment: str = _('по возрастанию цены')
     locale: str = hotels_api_locales.get(data['locale'], 'en_US')
     url: str = "https://hotels4.p.rapidapi.com/properties/list"
     headers: dict = {'x-rapidapi-host': "hotels4.p.rapidapi.com", 'x-rapidapi-key': APIKEY}
@@ -408,7 +366,7 @@ async def process_find(message: Message, state: FSMContext) -> None:
     result: list = []
     pages: int = ceil(int(max_hotels)/25)
     for page in range(1, pages + 1):
-        querystring['pageNumber']: str = str(page)
+        querystring['pageNumber'] = str(page)
         async with ClientSession() as session:
             async with session.get(url, headers=headers, params=querystring) as resp:
                 if resp.status == 200:
@@ -466,7 +424,7 @@ async def process_find(message: Message, state: FSMContext) -> None:
                'hotels':[]})
     connection.close()
     await state.update_data(db=db, timestamp=timestamp)
-    temp: Message = await message.answer('Готово')
+    temp: Message = await message.answer(_('Готово'))
     await command_show(temp, state)
 
 
@@ -490,7 +448,7 @@ async def hotel_callback(query: CallbackQuery, state: FSMContext) -> None:
                                                 longitude=hotel['longitude'])
     elif parse[0] == 'photo':
         albums: dict = data.get('albums', {})
-        album: list = albums.get(hotel['id'], None)
+        album: Any = albums.get(hotel['id'], None)
         if album is None:
             album: list = []
             url: str = "https://hotels4.p.rapidapi.com/properties/get-hotel-photos"
@@ -506,7 +464,7 @@ async def hotel_callback(query: CallbackQuery, state: FSMContext) -> None:
                             url: str = picture.get('baseUrl')
                             size: str = picture['sizes'][0].get('suffix', 'z')
                             album.append(url.replace('{size}', size))
-            albums[hotel['id']]: list = album
+            albums[hotel['id']] = album
             await state.update_data(albums=albums, album=album)
         await state.set_state(HotelBotForm.show_photo)
         await start_photo(query.message, state)
@@ -521,7 +479,7 @@ async def start_photo(message: Message, state: FSMContext) -> None:
     pages: int = len(album)
     paginator: InlineKeyboardPaginator = InlineKeyboardPaginator(page_count=pages,
                                                                  data_pattern='picture#{page}')
-    paginator.add_after(InlineKeyboardButton('\U0000274C Закрыть', callback_data='back'))
+    paginator.add_after(InlineKeyboardButton('\U0000274C ' + _('Закрыть'), callback_data='back'))
     await state.update_data(photo_page=1)
     await message.answer_photo(album[0], reply_markup=calendar_keyboard(paginator.markup))
 
@@ -544,7 +502,7 @@ async def photo_page_callback(query: CallbackQuery, state: FSMContext) -> None:
             paginator: InlineKeyboardPaginator = InlineKeyboardPaginator(page_count=pages,
                                                                          current_page=page,
                                                                          data_pattern='picture#{page}')
-            paginator.add_after(InlineKeyboardButton('\U0000274C Закрыть', callback_data='back'))
+            paginator.add_after(InlineKeyboardButton('\U0000274C ' + _('Закрыть'), callback_data='back'))
             await state.bot.edit_message_media(media=InputMedia(type='photo',
                                                                   media=album[page-1]),
                                                chat_id=query.message.chat.id,
@@ -560,7 +518,7 @@ async def process_set_min_price(message: Message, state: FSMContext) -> None:
     data: dict = await state.get_data()
     config_messages: list = data['config_messages']
     config_messages.append(message)
-    config_messages.append(await message.answer('Введите максимальную цену:'))
+    config_messages.append(await message.answer(_('Введите максимальную цену:')))
     await state.update_data(lowprice=abs(int(message.text)), config_messages=config_messages)
     await state.set_state(HotelBotForm.set_price2)
 
@@ -576,7 +534,7 @@ async def process_set_max_price(message: Message, state: FSMContext) -> None:
     lowprice: int = data.get('lowprice', 0)
     highprice: int = abs(int(message.text))
     if highprice < lowprice:
-        config_messages.append(await message.answer('Неверно заданы границы, попробуйте еще раз'))
+        config_messages.append(await message.answer(_('Неверно заданы границы, попробуйте еще раз')))
         return
     for mes in config_messages:
         await mes.delete()
@@ -589,9 +547,10 @@ async def plugger(message: Message, state: FSMContext) -> None:
     Затычка для непонятных действий пользователя
     """
     await message.delete()
-    await message.answer('Непонятная команда, попробуйте ещё...')
+    await message.answer(_('Непонятная команда, попробуйте ещё...'))
 
-def register_fsm(dp: Router) -> None:
+
+def register_user_handlers(dp: Router) -> None:
     """
     Регистрация всех хендлеров
     """
@@ -604,8 +563,6 @@ def register_fsm(dp: Router) -> None:
     dp.message.register(command_help, Command(commands=["help"]))
     dp.message.register(command_history, F.text.startswith('\U0001F4C6'))
     dp.message.register(command_history, Command(commands=['history']))
-    dp.message.register(command_config, (F.text.contains('\U0001F527')), (F.from_user.id.in_(ADMINS)))
-    dp.message.register(command_config, Command(commands=['config']), (F.from_user.id.in_(ADMINS)))
     dp.message.register(command_setprices, Command(commands=['setprices']))
     dp.message.register(command_setprices, F.text.startswith('\U0001F4B5'))
     dp.message.register(command_show, F.text.startswith('\U000023E9'))
@@ -617,5 +574,4 @@ def register_fsm(dp: Router) -> None:
     dp.message.register(process_find, F.text.startswith('\U0001F44D'))
     dp.message.register(process_set_min_price, F.text.isdigit(), HotelBotForm.set_price1)
     dp.message.register(process_set_max_price, F.text.isdigit(), HotelBotForm.set_price2)
-    dp.message.register(process_config, HotelBotForm.config)
     dp.message.register(plugger)

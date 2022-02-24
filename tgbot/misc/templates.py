@@ -24,6 +24,6 @@ history_card: str = """
     {% if price_max %}Цены от {{cur_sym}}{{price_min}} до {{cur_sym}}{{price_max}} {% endif %}
     Просмотрены отели:
     {% for hotel in hotels %}
-    <b>{{hotel[0]|e}}</b>
+    <b><a href="{{hotel[1]|e}}">{{hotel[0]|e}}</a></b>
     {% endfor %}
     """

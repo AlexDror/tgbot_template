@@ -4,7 +4,12 @@
 from dataclasses import dataclass
 
 from aiogram import Bot
+from aiogram.utils.i18n import I18n
 from environs import Env
+
+
+i18n = I18n(path='locales', default_locale="ru", domain="messages")
+_ = i18n.gettext
 
 @dataclass
 class DbConfig:
@@ -41,6 +46,7 @@ class Miscellaneous:
     pictures_per_page: str = None
     show_venue: str = None
     use_geocode: str = None
+    search_exact_matches: str = None
 
 
 @dataclass
@@ -83,6 +89,7 @@ def load_config(path: str = None):
             app_name=env.str('APP_NAME'),
             pictures_per_page = env.str('PICTURES_PER_PAGE'),
             use_geocode=env.str('USE_GEOCODE'),
+            search_exact_matches=env.str('SEARCH_EXACT_MATCHES'),
             show_venue = env.str('SHOW_VENUE')
 
         )
@@ -92,12 +99,13 @@ async def set_commands(bot: Bot):
     """
     Установка команд
     """
-    await bot.set_my_commands([{'command':'start', 'description':'Начало поиска'},
-                               {'command': 'help', 'description':'Помощь'},
-                               {'command': 'lowprice', 'description':'По возрастанию цены'},
-                               {'command': 'highprice', 'description':'По убыванию цены'},
-                               {'command': 'bestdeal', 'description':'Лучший выбор по удаленности и цене'},
-                               {'command': 'history', 'description':'История поиска'},
+    pass
+    await bot.set_my_commands([{'command':'start', 'description':_('Начало поиска')},
+                               {'command': 'help', 'description':_('Помощь')},
+                               {'command': 'lowprice', 'description':_('По возрастанию цены')},
+                               {'command': 'highprice', 'description':_('По убыванию цены')},
+                               {'command': 'bestdeal', 'description':_('Лучший выбор по удаленности и цене')},
+                               {'command': 'history', 'description':_('История поиска')},
                                ])
 
 config = load_config('.env')

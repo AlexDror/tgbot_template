@@ -1,0 +1,175 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-02-24 10:29+0300\n"
+"PO-Revision-Date: 2022-02-24 10:32+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/config.py:99
+msgid "Начало поиска"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/config.py:100
+msgid "Помощь"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/config.py:101
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:13
+msgid "По возрастанию цены"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/config.py:102
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:14
+msgid "По убыванию цены"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/config.py:103
+msgid "Лучший выбор по удаленности и цене"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/config.py:104
+msgid "История поиска"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/admin.py:22
+msgid "Здесь можно настроить дополнительныепараметры бота"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/admin.py:24
+msgid "Доступны следующие параметры:"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/admin.py:28
+msgid ""
+"Введите имя параметра и его новое значение через символ \"=\" без "
+"пробелов, окончание ввода - 0"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:61
+msgid ""
+"Вас приветствует телеграм-бот туристического агентства TooEasyTravel!\n"
+"Я попробую найти для Вас комфортный отель по заданным Вами условиям,и я "
+"уверен, у нас все получится! Если Вы готовы, введите название города, в "
+"котором Вы планируете остановиться"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:74
+msgid "История поиска:"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:93
+msgid "Введите минимальную цену: "
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:141
+msgid "У Вас все получится..."
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:179
+msgid "К сожалению, не могу найти такого города, попробуйте еще раз..."
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:201
+msgid "Уточните название города, пожалуйста:"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:241
+msgid "Выберите дату заезда"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:260
+msgid "Выберите, как отсортировать для Вас отели"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:276
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:287
+msgid "Неверная дата, попробуйте еще раз"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:302
+msgid "Выберите дату выезда"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:350
+msgid "по убыванию цены"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:353
+msgid "оптимум по цене и расстоянию от центра"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:356
+msgid "по возрастанию цены"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:427
+msgid "Готово"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:482
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:505
+msgid "Закрыть"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:521
+msgid "Введите максимальную цену:"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:537
+msgid "Неверно заданы границы, попробуйте еще раз"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/handlers/users.py:550
+msgid "Непонятная команда, попробуйте ещё..."
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/inline.py:39
+msgid "Карта"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/inline.py:41
+msgid "Сайт"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/inline.py:43
+msgid "Галерея"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:8
+msgid "Старт"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:9
+msgid "История"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:11
+msgid "Настройка"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:15
+msgid "Лучший выбор"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:16
+msgid "Диапазон цен"
+msgstr ""
+
+#: /Users/alexey/PycharmProjects/tgbot_template/tgbot/keyboards/reply.py:18
+msgid "Показать еще..."
+msgstr ""
+

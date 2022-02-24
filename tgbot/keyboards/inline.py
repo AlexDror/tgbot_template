@@ -3,10 +3,12 @@
 """
 from json import loads
 from lxml import html
-from lxml.html.clean import clean_html
 
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+from tgbot.config import i18n
+
+_ = i18n.gettext
 
 def calendar_keyboard(src: str) -> InlineKeyboardMarkup:
     """
@@ -36,11 +38,11 @@ def hotel_keyboard(data: dict, number: int) -> InlineKeyboardMarkup:
     """
     Клавиатура отеля
     """
-    btn_map: InlineKeyboardButton = InlineKeyboardButton(text='\U0001F30D Карта',
+    btn_map: InlineKeyboardButton = InlineKeyboardButton(text='\U0001F30D ' + _('Карта'),
                                                          callback_data='map#' + str(number))
-    btn_url: InlineKeyboardButton = InlineKeyboardButton(text='\U0001F517 Сайт',
+    btn_url: InlineKeyboardButton = InlineKeyboardButton(text='\U0001F517 ' + _('Сайт'),
                                                          url=data['url'])
-    btn_photo: InlineKeyboardButton = InlineKeyboardButton(text='\U0001F4F7 Галерея',
+    btn_photo: InlineKeyboardButton = InlineKeyboardButton(text='\U0001F4F7 ' + _('Галерея'),
                                                            callback_data='photo#'+str(number))
     return InlineKeyboardMarkup(inline_keyboard=[[btn_map, btn_url, btn_photo]])
 

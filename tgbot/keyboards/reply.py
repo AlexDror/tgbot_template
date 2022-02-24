@@ -2,15 +2,19 @@
 Reply-клавиатуры и все, что с ними связано
 """
 from aiogram.types import KeyboardButton
+#from aiogram.utils.i18n import gettext as _
+from tgbot.config import i18n
 
-reply_keyboard: list = [KeyboardButton(text='\U0001F3E0 Старт'),
-                        KeyboardButton(text='\U0001F4C6 История')]
+_ = i18n.gettext
 
-btn_config: KeyboardButton = KeyboardButton(text='\U0001F527 Настройка')
+reply_keyboard: list = [KeyboardButton(text='\U0001F3E0 ' + _('Старт')),
+                        KeyboardButton(text='\U0001F4C6 ' + _('История'))]
 
-search_keyboard: list = [[KeyboardButton(text='\U0001F4C8 По возрастанию цены'),
-                   KeyboardButton(text='\U0001F4C9 По убыванию цены'),
-                   KeyboardButton(text='\U0001F44D Лучший выбор')],
-                   [KeyboardButton(text='\U0001F4B5 Диапазон цен')]]
+btn_config: KeyboardButton = KeyboardButton(text='\U0001F527 ' + _('Настройка'))
 
-btn_show_more: KeyboardButton = KeyboardButton(text='\U000023E9 Показать еще...')
+search_keyboard: list = [[KeyboardButton(text='\U0001F4C8 ' + _('По возрастанию цены')),
+                   KeyboardButton(text='\U0001F4C9 ' + _('По убыванию цены')),
+                   KeyboardButton(text='\U0001F44D ' + _('Лучший выбор'))],
+                   [KeyboardButton(text='\U0001F4B5 ' + _('Диапазон цен'))]]
+
+btn_show_more: KeyboardButton = KeyboardButton(text='\U000023E9 ' + _('Показать еще...'))
